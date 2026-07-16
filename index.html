@@ -690,41 +690,6 @@
       document.getElementById(pageId).classList.remove('hidden');
     }
 
-    // Monitor deposit status and execute commissions upon approvals
-    function syncCommissionsOnApproval() {
-      const rechargeRef = db.ref('recharges/' + currentUser.phoneRaw);
-      rechargeRef.off('child_changed'); // Clear old listeners to avoid multiple evaluations
-      
-      rechargeRef.on('child_changed', async snapshot => {
-        const key = snapshot.key;
-        const data = snapshot.val();
-        if (data.status === "Deposited" && !data.commissionsDisbursed) {
-          // Double calculation prevention check
-          if (processedRechargeKeys.has(key)) return;
-          processedRechargeKeys.add(key);
-
-          // Use database transaction to claim commission disbursement atomically
-          const disbursedRef = db.ref('recharges/' + currentUser.phoneRaw + '/' + key + '/commissionsDisbursed');
-          disbursedRef.transaction(currentVal => {
-            if (currentVal === true) {
-              return; // Already disbursed, abort transaction
-            }
-            return true; // Mark as disbursed
-          }, async (error, committed) => {
-            if (error) {
-              console.error("Commission transaction error: ", error);
-              processedRechargeKeys.delete(key);
-              return;
-            }
-            if (committed) {
-              // Trigger Commission Distributions (A: 20%, B: 3%, C: 1%)
-              await executeCommissionDistributions(parseFloat(data.amount), 'deposit');
-            }
-          });
-        }
-      });
-    }
-
     function openModal(id) {
       document.getElementById(id).classList.remove('hidden');
       if (id === 'modal-recharge') renderModalRecharges();
@@ -1029,7 +994,7 @@
               dbChangesMade = true;
 
               // Pay daily income commission uplines (A: 3%, B: 2%, C: 1%)
-              executeCommissionDistributions(payout, 'daily');
+              executeCommissionDistributions(payout, 'daily', key);
             }
           });
 
@@ -1055,48 +1020,95 @@
     }
 
     // Deposit and Daily earnings commissions distribution
-    async function executeCommissionDistributions(baseAmount, type) {
+    async function executeCommissionDistributions(baseAmount, type, eventKey) {
       const now = new Date().toISOString();
 
       // Upline A (Direct referrer)
       if (currentUser.parentA) {
         const rate = type === 'deposit' ? 0.20 : 0.03;
         const commAmt = baseAmount * rate;
-        await creditUplineCommission(currentUser.parentA, commAmt, 'A', type, now);
+        await creditUplineCommission(currentUser.parentA, commAmt, 'A', type, now, eventKey);
       }
 
       // Upline B
       if (currentUser.parentB) {
         const rate = type === 'deposit' ? 0.03 : 0.02;
         const commAmt = baseAmount * rate;
-        await creditUplineCommission(currentUser.parentB, commAmt, 'B', type, now);
+        await creditUplineCommission(currentUser.parentB, commAmt, 'B', type, now, eventKey);
       }
 
       // Upline C
       if (currentUser.parentC) {
         const rate = type === 'deposit' ? 0.01 : 0.01;
         const commAmt = baseAmount * rate;
-        await creditUplineCommission(currentUser.parentC, commAmt, 'C', type, now);
+        await creditUplineCommission(currentUser.parentC, commAmt, 'C', type, now, eventKey);
       }
     }
 
-    async function creditUplineCommission(parentPhoneRaw, amount, teamLevel, commissionType, timestamp) {
-      const snap = await db.ref('users/' + parentPhoneRaw).once('value');
-      if (snap.exists()) {
-        const parent = snap.val();
-        const updatedBal = parseFloat(parent.balance) + amount;
-        await db.ref('users/' + parentPhoneRaw + '/balance').set(updatedBal);
+    async function creditUplineCommission(parentPhoneRaw, amount, teamLevel, commissionType, timestamp, eventKey) {
+      // Create a unique lock key based on the event (recharge or daily claim) to prevent double additions
+      const uniqueCommKey = eventKey 
+        ? `${eventKey}_${teamLevel}_${commissionType}_${new Date(timestamp).toDateString().replace(/ /g, "_")}` 
+        : `legacy_${currentUser.phoneRaw}_${teamLevel}_${commissionType}_${Date.now()}`;
 
-        // Record log entries
-        await db.ref('commissions/' + parentPhoneRaw).push({
-          amount: amount,
-          fromPhone: currentUser.phoneRaw,
-          fromId: currentUser.id,
-          teamLevel: teamLevel,
-          type: commissionType === 'deposit' ? "Deposit Commission" : "Daily Revenue Commission",
-          date: timestamp
-        });
+      const commRef = db.ref('commissions/' + parentPhoneRaw + '/' + uniqueCommKey);
+      const commSnap = await commRef.once('value');
+
+      if (commSnap.exists()) {
+        // Commission has already been paid and logged for this specific event. Prevent duplicate.
+        return;
       }
+
+      // Record the log entry first as our lock (Prevents concurrent duplicate requests from proceeding)
+      await commRef.set({
+        amount: amount,
+        fromPhone: currentUser.phoneRaw,
+        fromId: currentUser.id,
+        teamLevel: teamLevel,
+        type: commissionType === 'deposit' ? "Deposit Commission" : "Daily Revenue Commission",
+        date: timestamp
+      });
+
+      // Safely fetch and update the parent's balance atomically using a transaction
+      const userRef = db.ref('users/' + parentPhoneRaw);
+      await userRef.child('balance').transaction(currentBal => {
+        return parseFloat((parseFloat(currentBal || 0) + amount).toFixed(2));
+      });
+    }
+
+    // Monitor deposit status and execute commissions upon approvals
+    function syncCommissionsOnApproval() {
+      const rechargeRef = db.ref('recharges/' + currentUser.phoneRaw);
+      rechargeRef.off('child_changed'); // Clear old listeners to avoid multiple evaluations
+      
+      rechargeRef.on('child_changed', async snapshot => {
+        const key = snapshot.key;
+        const data = snapshot.val();
+        if (data.status === "Deposited" && !data.commissionsDisbursed) {
+          // Double calculation prevention check
+          if (processedRechargeKeys.has(key)) return;
+          processedRechargeKeys.add(key);
+
+          // Use database transaction to claim commission disbursement atomically
+          const disbursedRef = db.ref('recharges/' + currentUser.phoneRaw + '/' + key + '/commissionsDisbursed');
+          disbursedRef.transaction(currentVal => {
+            if (currentVal === true) {
+              return; // Already disbursed, abort transaction
+            }
+            return true; // Mark as disbursed
+          }, async (error, committed) => {
+            if (error) {
+              console.error("Commission transaction error: ", error);
+              processedRechargeKeys.delete(key);
+              return;
+            }
+            if (committed) {
+              // Trigger Commission Distributions (A: 20%, B: 3%, C: 1%)
+              await executeCommissionDistributions(parseFloat(data.amount), 'deposit', key);
+            }
+          });
+        }
+      });
     }
 
     // Copying address clipboards
