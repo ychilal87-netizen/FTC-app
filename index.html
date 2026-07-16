@@ -1682,7 +1682,7 @@
 
     // Execute Download App Action
     function triggerAppDownload() {
-      const link = (currentUser && currentUser.appLink) ? currentUser.appLink : APP_DOWNLOAD_URL;
+      const link = (currentUser && currentUser.appLink) ? currentUser.appLink : 'https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC';
       if (link && link !== "#") {
         window.open(link, '_blank');
       } else {
