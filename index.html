@@ -630,7 +630,7 @@
     // -------------------------------------------------------------------------
     // OFFICIAL MOBILE APP DOWNLOAD CONFIGURATION
     // -------------------------------------------------------------------------
-    const APP_DOWNLOAD_URL = "https://github.com/your-username/your-repo/releases/download/v1.0.0/app.apk"; 
+    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC"; 
 
     // Investment levels configuration (L1 - L7 with Unsplash Coffee Images)
     const levelSettings = [
@@ -950,6 +950,22 @@
           let totalIncomeAccumulated = 0;
           let dbChangesMade = false;
 
+          // First pass: Determine maximum level ID among active purchased levels
+          let maxActiveLevelId = 0;
+          snap.forEach(child => {
+            const data = child.val();
+            const purchaseDate = new Date(data.purchasedAt);
+            const daysDiff = (now - purchaseDate) / (1000 * 60 * 60 * 24);
+
+            if (daysDiff <= 58) {
+              const lvlId = parseInt(data.levelId);
+              if (lvlId > maxActiveLevelId) {
+                maxActiveLevelId = lvlId;
+              }
+            }
+          });
+
+          // Second pass: Process claims and update UI
           snap.forEach(child => {
             const key = child.key;
             const data = child.val();
@@ -973,8 +989,17 @@
               return;
             }
 
-            // Check if level is active and configure visual indicator if active
             const actionDiv = document.getElementById(`action-level-${data.levelId}`);
+
+            // If user upgraded to a higher level, daily income for previous levels must stop
+            if (parseInt(data.levelId) < maxActiveLevelId) {
+              if (actionDiv) {
+                actionDiv.innerHTML = `<span class="bg-gray-400/20 text-gray-500 font-bold border border-gray-300 px-3 py-1 rounded text-xs">Upgraded</span>`;
+              }
+              return; // Skip payment/claim calculation for lower levels
+            }
+
+            // Check if level is active and configure visual indicator if active
             if (actionDiv) {
               actionDiv.innerHTML = `<span class="bg-green-500/20 text-green-600 font-bold border border-green-500/30 px-3 py-1 rounded text-xs">Active</span>`;
             }
@@ -1135,15 +1160,31 @@
         return;
       }
 
-      const rechargeReq = {
-        amount: amount,
-        ref: ref,
-        date: new Date().toISOString(),
-        status: "Pending",
-        commissionsDisbursed: false
-      };
+      const refUpper = ref.toUpperCase();
 
       try {
+        // Enforce FT Reference Code uniqueness
+        const refCheckSnap = await db.ref('used_refs/' + refUpper).once('value');
+        if (refCheckSnap.exists()) {
+          alert("ስህተት፡ ይህ የ FT ማረጋገጫ ቁጥር ቀደም ሲል ጥቅም ላይ ውሏል! (Error: This FT reference number is already used!)");
+          return;
+        }
+
+        const rechargeReq = {
+          amount: amount,
+          ref: ref,
+          date: new Date().toISOString(),
+          status: "Pending",
+          commissionsDisbursed: false
+        };
+
+        // Pre-reserve reference globally as a lock to prevent concurrent submissions
+        await db.ref('used_refs/' + refUpper).set({
+          by: currentUser.phoneRaw,
+          amount: amount,
+          date: new Date().toISOString()
+        });
+
         await db.ref('recharges/' + currentUser.phoneRaw).push(rechargeReq);
         alert("Deposit submitted successfully! Status is currently Pending.");
         closeModal('modal-recharge');
@@ -1682,12 +1723,8 @@
 
     // Execute Download App Action
     function triggerAppDownload() {
-      const link = (currentUser && currentUser.appLink) ? currentUser.appLink : 'https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC';
-      if (link && link !== "#") {
-        window.open(link, '_blank');
-      } else {
-        alert("Download link is currently unavailable!");
-      }
+      const link = 'https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC';
+      window.open(link, '_blank');
     }
 
     // Execute password change
