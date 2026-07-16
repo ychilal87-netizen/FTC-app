@@ -690,6 +690,41 @@
       document.getElementById(pageId).classList.remove('hidden');
     }
 
+    // Monitor deposit status and execute commissions upon approvals
+    function syncCommissionsOnApproval() {
+      const rechargeRef = db.ref('recharges/' + currentUser.phoneRaw);
+      rechargeRef.off('child_changed'); // Clear old listeners to avoid multiple evaluations
+      
+      rechargeRef.on('child_changed', async snapshot => {
+        const key = snapshot.key;
+        const data = snapshot.val();
+        if (data.status === "Deposited" && !data.commissionsDisbursed) {
+          // Double calculation prevention check
+          if (processedRechargeKeys.has(key)) return;
+          processedRechargeKeys.add(key);
+
+          // Use database transaction to claim commission disbursement atomically
+          const disbursedRef = db.ref('recharges/' + currentUser.phoneRaw + '/' + key + '/commissionsDisbursed');
+          disbursedRef.transaction(currentVal => {
+            if (currentVal === true) {
+              return; // Already disbursed, abort transaction
+            }
+            return true; // Mark as disbursed
+          }, async (error, committed) => {
+            if (error) {
+              console.error("Commission transaction error: ", error);
+              processedRechargeKeys.delete(key);
+              return;
+            }
+            if (committed) {
+              // Trigger Commission Distributions (A: 20%, B: 3%, C: 1%)
+              await executeCommissionDistributions(parseFloat(data.amount), 'deposit');
+            }
+          });
+        }
+      });
+    }
+
     function openModal(id) {
       document.getElementById(id).classList.remove('hidden');
       if (id === 'modal-recharge') renderModalRecharges();
@@ -1062,28 +1097,6 @@
           date: timestamp
         });
       }
-    }
-
-    // Monitor deposit status and execute commissions upon approvals
-    function syncCommissionsOnApproval() {
-      const rechargeRef = db.ref('recharges/' + currentUser.phoneRaw);
-      rechargeRef.off('child_changed'); // Clear old listeners to avoid multiple evaluations
-      
-      rechargeRef.on('child_changed', async snapshot => {
-        const key = snapshot.key;
-        const data = snapshot.val();
-        if (data.status === "Deposited" && !data.commissionsDisbursed) {
-          // Double calculation prevention check
-          if (processedRechargeKeys.has(key)) return;
-          processedRechargeKeys.add(key);
-
-          // Trigger Commission Distributions (A: 20%, B: 3%, C: 1%)
-          await executeCommissionDistributions(parseFloat(data.amount), 'deposit');
-          
-          // Mark deposit processed to prevent duplicate commissions
-          await db.ref('recharges/' + currentUser.phoneRaw + '/' + key + '/commissionsDisbursed').set(true);
-        }
-      });
     }
 
     // Copying address clipboards
