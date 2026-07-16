@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -625,6 +624,8 @@
     let currentUser = null;
     let currentSecurityCode = '';
     let selectedLogTab = 'recharge';
+    let processedRechargeKeys = new Set(); // Guard against duplicate events
+    let isProcessingClaims = false; // concurrency safety lock
 
     // -------------------------------------------------------------------------
     // OFFICIAL MOBILE APP DOWNLOAD CONFIGURATION
@@ -642,14 +643,14 @@
       { id: 7, name: "Level 7", cost: 100000, daily: 20000, image: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=300&auto=format&fit=crop" }
     ];
 
-    // Salary reward tiers parameters (Fully cleared any "3000" references as requested)
+    // Salary reward tiers parameters
     const salarySettings = [
       { id: 1, reward: 500, requirement: 5000, title: "Salary 1" },
       { id: 2, reward: 1000, requirement: 10000, title: "Salary 2" },
-      { id: 3, reward: 4000, requirement: 40000, title: "Salary 3" }, // Replaced 3000 reward and 30000 requirement with 4000/40000
+      { id: 3, reward: 4000, requirement: 40000, title: "Salary 3" },
       { id: 4, reward: 5000, requirement: 50000, title: "Salary 4" },
       { id: 5, reward: 10000, requirement: 100000, title: "Salary 5" },
-      { id: 6, reward: 20000, requirement: 250000, title: "Salary 6" } // Replaced 300000 requirement with 250000
+      { id: 6, reward: 20000, requirement: 250000, title: "Salary 6" }
     ];
 
     window.onload = function() {
@@ -709,13 +710,17 @@
     function initHomeCarousel() {
       const track = document.getElementById('carousel-track');
       const dotsContainer = document.getElementById('carousel-dots');
+      if (!track) return;
       const slides = track.children;
       let slideIndex = 0;
 
-      for (let i = 0; i < slides.length; i++) {
-        const dot = document.createElement('div');
-        dot.className = `w-1.5 h-1.5 rounded-full transition-all ${i === 0 ? 'bg-white w-3' : 'bg-white/40'}`;
-        dotsContainer.appendChild(dot);
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < slides.length; i++) {
+          const dot = document.createElement('div');
+          dot.className = `w-1.5 h-1.5 rounded-full transition-all ${i === 0 ? 'bg-white w-3' : 'bg-white/40'}`;
+          dotsContainer.appendChild(dot);
+        }
       }
 
       setInterval(() => {
@@ -895,6 +900,7 @@
 
     // Initialize authenticated user dashboard state
     function initUserSession() {
+      processedRechargeKeys.clear();
       showPage('app-content');
       changeNavigation('home');
 
@@ -912,7 +918,9 @@
       }
 
       // Realtime listener for balance adjustments
-      db.ref('users/' + currentUser.phoneRaw).on('value', snap => {
+      const userRef = db.ref('users/' + currentUser.phoneRaw);
+      userRef.off('value'); // Clear old listener to prevent duplicates
+      userRef.on('value', snap => {
         if (snap.exists()) {
           currentUser = snap.val();
           document.getElementById('user-balance').innerText = parseFloat(currentUser.balance).toFixed(2);
@@ -930,75 +938,84 @@
 
     // Process daily investments claims
     async function processInvestmentClaims() {
-      const now = new Date();
-      const userRef = db.ref('users/' + currentUser.phoneRaw);
+      if (isProcessingClaims) return;
+      isProcessingClaims = true;
       
-      const snap = await db.ref('purchased_levels/' + currentUser.phoneRaw).once('value');
-      if (snap.exists()) {
-        let totalIncomeAccumulated = 0;
-        let dbChangesMade = false;
+      try {
+        const now = new Date();
+        const userRef = db.ref('users/' + currentUser.phoneRaw);
+        
+        const snap = await db.ref('purchased_levels/' + currentUser.phoneRaw).once('value');
+        if (snap.exists()) {
+          let totalIncomeAccumulated = 0;
+          let dbChangesMade = false;
 
-        snap.forEach(child => {
-          const key = child.key;
-          const data = child.val();
+          snap.forEach(child => {
+            const key = child.key;
+            const data = child.val();
 
-          // Check if active limit exceeded (58 Days check)
-          const purchaseDate = new Date(data.purchasedAt);
-          const daysDiff = (now - purchaseDate) / (1000 * 60 * 60 * 24);
+            // Check if active limit exceeded (58 Days check)
+            const purchaseDate = new Date(data.purchasedAt);
+            const daysDiff = (now - purchaseDate) / (1000 * 60 * 60 * 24);
 
-          if (daysDiff > 58) {
-            // Expired level
-            db.ref('purchased_levels/' + currentUser.phoneRaw + '/' + key).remove();
-            
-            // Mark Level UI to indicate re-investment requirement
+            if (daysDiff > 58) {
+              // Expired level
+              db.ref('purchased_levels/' + currentUser.phoneRaw + '/' + key).remove();
+              
+              // Mark Level UI to indicate re-investment requirement
+              const actionDiv = document.getElementById(`action-level-${data.levelId}`);
+              if (actionDiv) {
+                actionDiv.innerHTML = `
+                  <span class="text-[10px] text-red-500 font-bold block">Expired</span>
+                  <button onclick="purchaseInvestmentLevel(${data.levelId})" class="bg-red-600 text-white py-1 px-3 rounded text-[10px] font-bold">Invest Again</button>
+                `;
+              }
+              return;
+            }
+
+            // Check if level is active and configure visual indicator if active
             const actionDiv = document.getElementById(`action-level-${data.levelId}`);
             if (actionDiv) {
-              actionDiv.innerHTML = `
-                <span class="text-[10px] text-red-500 font-bold block">Expired</span>
-                <button onclick="purchaseInvestmentLevel(${data.levelId})" class="bg-red-600 text-white py-1 px-3 rounded text-[10px] font-bold">Invest Again</button>
-              `;
+              actionDiv.innerHTML = `<span class="bg-green-500/20 text-green-600 font-bold border border-green-500/30 px-3 py-1 rounded text-xs">Active</span>`;
             }
-            return;
-          }
 
-          // Check if level is active and configure visual indicator if active
-          const actionDiv = document.getElementById(`action-level-${data.levelId}`);
-          if (actionDiv) {
-            actionDiv.innerHTML = `<span class="bg-green-500/20 text-green-600 font-bold border border-green-500/30 px-3 py-1 rounded text-xs">Active</span>`;
-          }
+            // Calculate earned income blocks of 24h
+            const lastClaimDate = new Date(data.lastClaimAt);
+            const hoursPassed = (now - lastClaimDate) / (1000 * 60 * 60);
 
-          // Calculate earned income blocks of 24h
-          const lastClaimDate = new Date(data.lastClaimAt);
-          const hoursPassed = (now - lastClaimDate) / (1000 * 60 * 60);
+            if (hoursPassed >= 24) {
+              const periods = Math.floor(hoursPassed / 24);
+              const payout = data.daily * periods;
+              totalIncomeAccumulated += payout;
 
-          if (hoursPassed >= 24) {
-            const periods = Math.floor(hoursPassed / 24);
-            const payout = data.daily * periods;
-            totalIncomeAccumulated += payout;
+              // Update timestamp
+              const updatedClaimTime = new Date(lastClaimDate.getTime() + (periods * 24 * 60 * 60 * 1000));
+              db.ref('purchased_levels/' + currentUser.phoneRaw + '/' + key + '/lastClaimAt').set(updatedClaimTime.toISOString());
+              dbChangesMade = true;
 
-            // Update timestamp
-            const updatedClaimTime = new Date(lastClaimDate.getTime() + (periods * 24 * 60 * 60 * 1000));
-            db.ref('purchased_levels/' + currentUser.phoneRaw + '/' + key + '/lastClaimAt').set(updatedClaimTime.toISOString());
-            dbChangesMade = true;
-
-            // Pay daily income commission uplines (A: 3%, B: 2%, C: 1%)
-            executeCommissionDistributions(payout, 'daily');
-          }
-        });
-
-        if (dbChangesMade && totalIncomeAccumulated > 0) {
-          const newBal = parseFloat(currentUser.balance) + totalIncomeAccumulated;
-          await userRef.child('balance').set(newBal);
-
-          // Write record to transaction logs
-          await db.ref('transactions/' + currentUser.phoneRaw + '/earnings').push({
-            type: "Daily Investment Income",
-            amount: totalIncomeAccumulated,
-            date: now.toISOString()
+              // Pay daily income commission uplines (A: 3%, B: 2%, C: 1%)
+              executeCommissionDistributions(payout, 'daily');
+            }
           });
 
-          alert(`Daily earnings of ${totalIncomeAccumulated} ETB were credited to your balance!`);
+          if (dbChangesMade && totalIncomeAccumulated > 0) {
+            const newBal = parseFloat(currentUser.balance) + totalIncomeAccumulated;
+            await userRef.child('balance').set(newBal);
+
+            // Write record to transaction logs
+            await db.ref('transactions/' + currentUser.phoneRaw + '/earnings').push({
+              type: "Daily Investment Income",
+              amount: totalIncomeAccumulated,
+              date: now.toISOString()
+            });
+
+            alert(`Daily earnings of ${totalIncomeAccumulated} ETB were credited to your balance!`);
+          }
         }
+      } catch (err) {
+        console.error("Error claim processing: ", err);
+      } finally {
+        isProcessingClaims = false;
       }
     }
 
@@ -1049,14 +1066,22 @@
 
     // Monitor deposit status and execute commissions upon approvals
     function syncCommissionsOnApproval() {
-      db.ref('recharges/' + currentUser.phoneRaw).on('child_changed', async snapshot => {
+      const rechargeRef = db.ref('recharges/' + currentUser.phoneRaw);
+      rechargeRef.off('child_changed'); // Clear old listeners to avoid multiple evaluations
+      
+      rechargeRef.on('child_changed', async snapshot => {
+        const key = snapshot.key;
         const data = snapshot.val();
         if (data.status === "Deposited" && !data.commissionsDisbursed) {
+          // Double calculation prevention check
+          if (processedRechargeKeys.has(key)) return;
+          processedRechargeKeys.add(key);
+
           // Trigger Commission Distributions (A: 20%, B: 3%, C: 1%)
           await executeCommissionDistributions(parseFloat(data.amount), 'deposit');
           
           // Mark deposit processed to prevent duplicate commissions
-          await db.ref('recharges/' + currentUser.phoneRaw + '/' + snapshot.key + '/commissionsDisbursed').set(true);
+          await db.ref('recharges/' + currentUser.phoneRaw + '/' + key + '/commissionsDisbursed').set(true);
         }
       });
     }
@@ -1344,6 +1369,7 @@
     // Sync salary features Layout (Modified to show remaining requirements and horizontal layout)
     async function syncSalaryLayout() {
       const view = document.getElementById('salary-perks-view');
+      if (!view) return;
       view.innerHTML = '';
 
       // Count Team Deposits (A & B)
@@ -1472,6 +1498,7 @@
     // Synchronize direct & indirect team table
     async function syncTeamNetwork() {
       const tbody = document.getElementById('network-table-body');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       try {
@@ -1552,6 +1579,7 @@
     // Synchronize transactions log views
     async function syncTransactionsHistory() {
       const container = document.getElementById('transaction-logs-view');
+      if (!container) return;
       container.innerHTML = '';
 
       try {
@@ -1687,8 +1715,13 @@
 
     // Logout
     function triggerSignout() {
+      if (currentUser) {
+        db.ref('users/' + currentUser.phoneRaw).off();
+        db.ref('recharges/' + currentUser.phoneRaw).off();
+      }
       currentUser = null;
       db.ref('users').off(); // Remove listeners
+      processedRechargeKeys.clear();
       showPage('login-page');
     }
   </script>
