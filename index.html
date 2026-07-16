@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fair Trade Coffee (FTC)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle, #1a0826, #020005);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    
+    /* 10+ Sparkling Bright Colors & Glowing Custom Aesthetic */
+    .color-1 { color: #FF0055; }
+    .color-2 { color: #FFB300; }
+    .color-3 { color: #00E5FF; }
+    .color-4 { color: #39FF14; }
+    .color-5 { color: #FF007F; }
+    .color-6 { color: #FF5722; }
+    .color-7 { color: #7B1FA2; }
+    .color-8 { color: #00E676; }
+    .color-9 { color: #FFEB3B; }
+    .color-10 { color: #03A9F4; }
+    .color-11 { color: #E91E63; }
+
+    .rainbow-gradient {
+      background: linear-gradient(135deg, #FF0055, #FFB300, #00E5FF, #39FF14, #FF007F, #FF5722, #7B1FA2, #00E676, #FFEB3B, #03A9F4);
+      background-size: 400% 400%;
+      animation: rainbowShift 12s ease infinite;
+    }
+
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating community marquee text */
+    @keyframes marqueeScroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .marquee-wrapper {
+      animation: marqueeScroll 16s linear infinite;
+    }
+
+    /* Slideshow Carousel 16:9 YouTube Ratio */
+    .aspect-16-9 {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Active navigation tab highlight */
+    .active-nav-tab {
+      background: linear-gradient(45deg, #FF007F, #FFB300);
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col max-w-md mx-auto relative border-l border-r border-gray-950 shadow-2xl">
+
+  <!-- Welcome Splash Screen -->
+  <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center rainbow-gradient text-center p-6">
+    <div class="animate-bounce mb-6 text-7xl">☕</div>
+    <h1 class="text-5xl font-black tracking-widest text-white drop-shadow-md mb-2">Welcome to FTC</h1>
+    <p class="text-lg text-yellow-300 font-extrabold tracking-wider uppercase">Fair Trade Coffee</p>
+    <div class="mt-10 text-white text-xs animate-pulse font-semibold">Please wait a few seconds...</div>
+  </div>
+
+  <!-- Registration Screen -->
+  <div id="register-page" class="hidden flex-1 p-6 flex flex-col justify-center">
+    <div class="text-center mb-8">
+      <span class="text-6xl">☕</span>
+      <h2 class="text-3xl font-black mt-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">Sign Up</h2>
+      <p class="text-xs text-yellow-300 mt-1 font-bold">Register to receive 100 ETB Bonus!</p>
+    </div>
+
+    <form id="register-form" class="space-y-4">
+      <!-- Phone Input -->
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Phone Number (+251)</label>
+        <div class="flex">
+          <span class="bg-gray-800 px-3 py-3 border border-r-0 border-gray-700 rounded-l-lg font-bold text-gray-300">+251</span>
+          <input type="text" id="reg-phone" class="flex-1 bg-gray-950 p-3 border border-gray-700 rounded-r-lg text-white font-bold tracking-widest focus:border-pink-500 focus:outline-none" placeholder="09xxxxxxxx" maxlength="10" required>
+        </div>
+        <p class="text-[10px] text-gray-400 mt-1">Must be exactly 10 digits starting with 0 (e.g. 0912345678)</p>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Password (8-digit number only)</label>
+        <input type="password" id="reg-password" class="w-full bg-gray-950 p-3 border border-gray-700 rounded-lg text-white tracking-widest focus:border-yellow-500 focus:outline-none" placeholder="********" maxlength="8" required>
+      </div>
+
+      <!-- Pass Key -->
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Withdraw Pass Key (2 letters & 2 numbers)</label>
+        <input type="text" id="reg-passkey" class="w-full bg-gray-950 p-3 border border-gray-700 rounded-lg text-white uppercase tracking-widest focus:border-cyan-400 focus:outline-none" placeholder="e.g. AB12" maxlength="4" required>
+      </div>
+
+      <!-- Verification Code -->
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Verification Code</label>
+        <div class="flex space-x-2">
+          <input type="text" id="reg-verif" class="flex-1 bg-gray-950 p-3 border border-gray-700 rounded-lg text-white focus:border-purple-500 focus:outline-none" placeholder="Enter security code" required>
+          <div id="verif-code-box" class="bg-gradient-to-r from-teal-500 to-indigo-600 px-5 py-3 rounded-lg font-black text-lg cursor-pointer tracking-wider flex items-center justify-center border border-white/20 select-none" title="Click to regenerate">
+            0000
+          </div>
+        </div>
+      </div>
+
+      <!-- Invitation Code -->
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Invitation Code</label>
+        <input type="text" id="reg-invite" class="w-full bg-gray-950 p-3 border border-gray-700 rounded-lg text-yellow-400 font-bold focus:outline-none" placeholder="6-digit FTC Code" readonly>
+      </div>
+
+      <button type="submit" class="w-full py-4 rounded-lg font-black text-lg text-white shadow-lg rainbow-gradient hover:opacity-90 transform active:scale-95 transition-all">REGISTER NOW ☕</button>
+    </form>
+
+    <div class="text-center mt-6">
+      <p class="text-xs text-gray-400">Already have an account? <a href="#" onclick="showPage('login-page')" class="text-cyan-400 font-bold hover:underline">Login here</a></p>
+    </div>
+  </div>
+
+  <!-- Login Screen -->
+  <div id="login-page" class="hidden flex-1 p-6 flex flex-col justify-center">
+    <div class="text-center mb-8">
+      <span class="text-6xl">☕</span>
+      <h2 class="text-3xl font-black mt-3 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Login</h2>
+    </div>
+
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Phone Number (+251)</label>
+        <div class="flex">
+          <span class="bg-gray-800 px-3 py-3 border border-r-0 border-gray-700 rounded-l-lg font-bold text-gray-300">+251</span>
+          <input type="text" id="login-phone" class="flex-1 bg-gray-950 p-3 border border-gray-700 rounded-r-lg text-white font-bold tracking-widest focus:outline-none" placeholder="09xxxxxxxx" maxlength="10" required>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold mb-1 text-gray-300">Password</label>
+        <input type="password" id="login-password" class="w-full bg-gray-950 p-3 border border-gray-700 rounded-lg text-white tracking-widest focus:outline-none" placeholder="********" maxlength="8" required>
+      </div>
+
+      <button type="submit" class="w-full py-4 rounded-lg font-black text-lg text-white shadow-lg rainbow-gradient hover:opacity-90 transform active:scale-95 transition-all">SIGN IN ☕</button>
+    </form>
+
+    <div class="text-center mt-6">
+      <p class="text-xs text-gray-400">New User? <a href="#" onclick="showPage('register-page')" class="text-pink-500 font-bold hover:underline">Create an account</a></p>
+    </div>
+  </div>
+
+  <!-- Main View Dashboard -->
+  <div id="app-content" class="hidden flex-1 flex flex-col pb-20 overflow-y-auto">
+    <!-- Header banner -->
+    <header class="rainbow-gradient p-4 flex justify-between items-center shadow-2xl">
+      <div class="flex items-center space-x-2">
+        <span class="text-2xl">☕</span>
+        <span class="font-black text-lg tracking-wider text-white">Fair Trade Coffee</span>
+      </div>
+      <div class="bg-black/45 px-3 py-1.5 rounded-full border border-white/20 text-xs font-bold text-yellow-300">
+        ID: <span id="header-id" class="text-white font-black">------</span>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 space-y-6">
+
+      <!-- View: HOME -->
+      <section id="view-home" class="view-panel space-y-6">
+        <!-- 16:9 aspect ratio rotating image carousel (Simulates Video Slideshow) -->
+        <div class="aspect-16-9 rounded-2xl border border-white/10 shadow-xl relative">
+          <div id="carousel-track" class="w-full h-full flex transition-transform duration-700 ease-in-out">
+            <!-- Automatically loads beautiful high-res coffee images matching fair trade themes -->
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_0.png'" class="w-full h-full object-cover shrink-0" alt="Coffee farming">
+            <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_1.png'" class="w-full h-full object-cover shrink-0" alt="Coffee beans">
+            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_2.png'" class="w-full h-full object-cover shrink-0" alt="Fairtrade concept">
+            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_3.png'" class="w-full h-full object-cover shrink-0" alt="Brewing coffee">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_4.png'" class="w-full h-full object-cover shrink-0" alt="Fair trade coffee cup">
+            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_5.png'" class="w-full h-full object-cover shrink-0" alt="Coffee mugs">
+            <img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=640&auto=format&fit=crop" onerror="this.src='input_file_6.png'" class="w-full h-full object-cover shrink-0" alt="Quality beans processing">
+          </div>
+          <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1.5" id="carousel-dots"></div>
+        </div>
+
+        <!-- Wallet Hub -->
+        <div class="glassmorphism rounded-2xl p-6 border-l-4 border-yellow-400 relative overflow-hidden">
+          <div class="absolute -right-6 -bottom-6 text-8xl opacity-5 pointer-events-none">☕</div>
+          <p class="text-xs text-gray-400 tracking-widest font-black uppercase">Available Balance</p>
+          <div class="text-4xl font-black mt-1 text-yellow-300"><span id="user-balance">100.00</span> <span class="text-sm text-white">ETB</span></div>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button onclick="openModal('modal-recharge')" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:scale-105 active:scale-95 transition-all text-white py-3 px-4 rounded-xl font-black text-xs flex items-center justify-center space-x-1.5 shadow-lg"><i class="fa-solid fa-wallet"></i> <span>Recharge</span></button>
+            <button onclick="openModal('modal-withdraw')" class="bg-gradient-to-r from-rose-500 to-pink-600 hover:scale-105 active:scale-95 transition-all text-white py-3 px-4 rounded-xl font-black text-xs flex items-center justify-center space-x-1.5 shadow-lg"><i class="fa-solid fa-money-bill-transfer"></i> <span>Withdraw</span></button>
+          </div>
+        </div>
+
+        <!-- Floating TRC Group text banner -->
+        <div class="overflow-hidden bg-indigo-950/60 border border-indigo-500/30 rounded-xl p-3 flex items-center cursor-pointer hover:bg-indigo-900/60 transition-all shadow-md" onclick="window.open('https://t.me/+cU4qwvJwlA9hZjg0', '_blank')">
+          <span class="bg-indigo-500 text-white font-black text-[10px] px-2 py-0.5 rounded mr-3 animate-pulse">JOIN</span>
+          <div class="flex-1 overflow-hidden relative h-5">
+            <div class="absolute whitespace-nowrap text-xs font-bold text-cyan-300 marquee-wrapper">
+              ⚡ Join TRC community on Telegram! Click here to enter: t.me/+cU4qwvJwlA9hZjg0 ⚡
+            </div>
+          </div>
+        </div>
+
+        <!-- Telegram Support Info -->
+        <div class="glassmorphism rounded-xl p-4 flex items-center justify-between border border-cyan-500/20 cursor-pointer" onclick="window.open('https://t.me/TRCcustomerservice', '_blank')">
+          <div class="flex items-center space-x-3">
+            <div class="bg-cyan-500/20 p-2.5 rounded-full text-cyan-400 text-xl animate-pulse">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-xs text-white">Customers Service Username</h4>
+              <p class="text-[10px] text-cyan-400 font-bold">@TRCcustomerservice</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
+        </div>
+      </section>
+
+      <!-- View: LEVELS -->
+      <section id="view-levels" class="view-panel hidden space-y-4">
+        <div class="text-center mb-4">
+          <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Coffee Investment Levels</h2>
+          <p class="text-xs text-gray-400">Valid for 58 Days. Daily income updates automatically every 24 hours.</p>
+        </div>
+
+        <!-- Level list items -->
+        <div class="space-y-4" id="levels-list-view">
+          <!-- Populated from JS configs -->
+        </div>
+      </section>
+
+      <!-- View: MONEY -->
+      <section id="view-money" class="view-panel hidden space-y-6">
+        <!-- Treasure code claim interface -->
+        <div class="glassmorphism rounded-2xl p-5 border border-pink-500/20 shadow-xl relative">
+          <h3 class="font-black text-md text-pink-400 mb-1 flex items-center"><i class="fa-solid fa-gift mr-2"></i> Daily Treasure Code</h3>
+          <p class="text-xs text-gray-400 mb-4">Win 25 ETB rewards! Valid only for the first 10 users every 24 hours.</p>
+          <div class="space-y-3">
+            <input type="text" id="treasure-code-input" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-center uppercase tracking-widest font-black focus:outline-none focus:border-pink-500" placeholder="Enter Code">
+            <button onclick="claimTreasureCode()" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-pink-500 to-rose-600 hover:opacity-90 active:scale-95 transition-all text-white shadow-lg">CLAIM TREASURE</button>
+          </div>
+        </div>
+
+        <!-- Salary specifications -->
+        <div class="glassmorphism rounded-2xl p-5 border border-amber-500/20 shadow-xl">
+          <h3 class="font-black text-md text-amber-400 mb-1 flex items-center"><i class="fa-solid fa-briefcase mr-2"></i> Team Salary Perks</h3>
+          <p class="text-xs text-gray-400 mb-4">Salary eligibility is counted from verified deposit totals of Team A + B</p>
+          <div class="space-y-3" id="salary-perks-view">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- View: LINK -->
+      <section id="view-link" class="view-panel hidden space-y-6">
+        <!-- Invitations detail view -->
+        <div class="glassmorphism rounded-2xl p-6 border-t-4 border-cyan-400 text-center shadow-xl">
+          <h3 class="font-black text-xl text-cyan-300 mb-1">Invite Friends</h3>
+          <p class="text-xs text-gray-400 mb-4">Build your downline teams to earn massive commissions</p>
+          
+          <div class="bg-black/40 p-4 rounded-xl border border-gray-800 space-y-2 mb-4">
+            <p class="text-[10px] font-bold text-gray-400">My Invite Code</p>
+            <div id="my-invite-code-id" class="text-2xl font-black tracking-widest text-white">------</div>
+            <button onclick="copySharePackage()" class="w-full py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-black hover:opacity-90 active:scale-95 transition-all flex items-center justify-center space-x-1.5 text-white"><i class="fa-solid fa-copy"></i> <span>Copy Invite Link & Code</span></button>
+          </div>
+
+          <!-- Commissions schema -->
+          <div class="text-left bg-gray-950/60 p-4 rounded-xl border border-gray-900 space-y-2 text-xs">
+            <p class="font-bold text-yellow-400">Commission Rates:</p>
+            <div class="grid grid-cols-2 gap-2 text-gray-300 text-[11px]">
+              <div>• <strong>Level A</strong> Deposit: <span class="text-cyan-300 font-bold">20%</span></div>
+              <div>• <strong>Level A</strong> Daily Earn: <span class="text-emerald-400 font-bold">3%</span></div>
+              <div>• <strong>Level B</strong> Deposit: <span class="text-cyan-300 font-bold">3%</span></div>
+              <div>• <strong>Level B</strong> Daily Earn: <span class="text-emerald-400 font-bold">2%</span></div>
+              <div>• <strong>Level C</strong> Deposit: <span class="text-cyan-300 font-bold">1%</span></div>
+              <div>• <strong>Level C</strong> Daily Earn: <span class="text-emerald-400 font-bold">1%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Downline users list table -->
+        <div class="glassmorphism rounded-2xl p-5 border border-purple-500/20 shadow-xl overflow-hidden">
+          <h3 class="font-black text-md text-purple-400 mb-3 flex items-center"><i class="fa-solid fa-users mr-2"></i> Team Network Details</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-gray-800 text-gray-400 font-bold">
+                  <th class="py-2">Phone / ID</th>
+                  <th class="py-2">Level</th>
+                  <th class="py-2 text-right">Commissions</th>
+                </tr>
+              </thead>
+              <tbody id="network-table-body" class="divide-y divide-gray-900 text-gray-300">
+                <tr>
+                  <td colspan="3" class="text-center py-4 text-gray-500">No downline records.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: MY -->
+      <section id="view-my" class="view-panel hidden space-y-6">
+        <!-- User account parameters -->
+        <div class="rainbow-gradient rounded-2xl p-6 shadow-2xl">
+          <div class="flex items-center space-x-4">
+            <div class="bg-black/30 p-4 rounded-full text-3xl">☕</div>
+            <div>
+              <h3 id="my-profile-phone" class="font-black text-lg text-white">------</h3>
+              <p class="text-xs text-yellow-300 font-bold">User ID: <span id="my-profile-id">------</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Utilities -->
+        <div class="glassmorphism rounded-2xl divide-y divide-gray-800 overflow-hidden shadow-xl">
+          <button onclick="openModal('modal-transactions')" class="w-full p-4 flex items-center justify-between text-left hover:bg-white/5 transition-all">
+            <span class="flex items-center space-x-3 text-sm font-bold"><i class="fa-solid fa-receipt text-amber-400 text-lg"></i> <span>Transaction Log Histories</span></span>
+            <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+          </button>
+          
+          <button onclick="openModal('modal-change-pwd')" class="w-full p-4 flex items-center justify-between text-left hover:bg-white/5 transition-all">
+            <span class="flex items-center space-x-3 text-sm font-bold"><i class="fa-solid fa-key text-pink-500 text-lg"></i> <span>Change Password</span></span>
+            <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+          </button>
+          
+          <button onclick="openModal('modal-change-pkey')" class="w-full p-4 flex items-center justify-between text-left hover:bg-white/5 transition-all">
+            <span class="flex items-center space-x-3 text-sm font-bold"><i class="fa-solid fa-lock text-cyan-400 text-lg"></i> <span>Change Withdraw Passkey</span></span>
+            <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+          </button>
+
+          <!-- App Download URL Configuration -->
+          <div class="p-4 space-y-2">
+            <label class="block text-[10px] font-bold text-gray-400 uppercase">App Link Configuration</label>
+            <div class="flex space-x-2">
+              <input type="text" id="app-download-link-input" class="flex-1 bg-gray-950 p-2 border border-gray-800 rounded-lg text-xs text-white" placeholder="https://yourdomain.com/app.apk">
+              <button onclick="saveAppDownloadLink()" class="bg-emerald-500 text-black px-4 py-2 rounded-lg font-black text-xs hover:bg-emerald-400">Save</button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="triggerSignout()" class="w-full py-4 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-2xl font-bold text-red-400 flex items-center justify-center space-x-2 transition-all shadow-md"><i class="fa-solid fa-right-from-bracket"></i> <span>Sign Out</span></button>
+      </section>
+
+    </main>
+
+    <!-- Bottom App Navigation Tabs (5 Tabs) -->
+    <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-black/95 border-t border-gray-800 flex justify-around items-center py-2 z-40 backdrop-blur-md shadow-2xl">
+      <button onclick="changeNavigation('home')" id="tab-home" class="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-gray-400 transition-all active-nav-tab">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[9px] mt-1 font-bold">Home</span>
+      </button>
+      <button onclick="changeNavigation('levels')" id="tab-levels" class="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-gray-400 transition-all">
+        <i class="fa-solid fa-cubes text-lg"></i>
+        <span class="text-[9px] mt-1 font-bold">Levels</span>
+      </button>
+      <button onclick="changeNavigation('money')" id="tab-money" class="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-gray-400 transition-all">
+        <i class="fa-solid fa-coins text-lg"></i>
+        <span class="text-[9px] mt-1 font-bold">Money</span>
+      </button>
+      <button onclick="changeNavigation('link')" id="tab-link" class="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-gray-400 transition-all">
+        <i class="fa-solid fa-link text-lg"></i>
+        <span class="text-[9px] mt-1 font-bold">Link</span>
+      </button>
+      <button onclick="changeNavigation('my')" id="tab-my" class="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-gray-400 transition-all">
+        <i class="fa-solid fa-user text-lg"></i>
+        <span class="text-[9px] mt-1 font-bold">My</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL: RECHARGE -->
+  <div id="modal-recharge" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="glassmorphism w-full max-w-sm rounded-3xl p-6 border border-emerald-500/30 space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+        <h3 class="font-black text-md text-emerald-400">Recharge Your Wallet</h3>
+        <button onclick="closeModal('modal-recharge')" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <!-- Payment Recipient Information Card -->
+      <div class="bg-black/60 p-4 rounded-2xl border border-gray-900 space-y-3">
+        <div>
+          <span class="text-[9px] text-gray-400 block font-bold">CBE ACCOUNT NAME</span>
+          <span class="text-sm font-bold text-white">Yesewzer</span>
+        </div>
+        <div>
+          <span class="text-[9px] text-gray-400 block font-bold">CBE ACCOUNT NUMBER (Click to copy)</span>
+          <div class="flex items-center justify-between mt-1 bg-gray-950 p-2 rounded border border-gray-800">
+            <span id="recharge-account-num" class="font-black text-sm tracking-wider text-white">1000418939498</span>
+            <button onclick="copyToClipboard('1000418939498')" class="text-emerald-400 text-xs font-black hover:underline">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Level Select buttons -->
+      <div class="grid grid-cols-3 gap-1.5 text-xs font-black">
+        <button onclick="quickSelectRecharge(500)" class="bg-gray-800 py-2 rounded text-white hover:bg-emerald-500 hover:text-black transition-all">L1 (500)</button>
+        <button onclick="quickSelectRecharge(2500)" class="bg-gray-800 py-2 rounded text-white hover:bg-emerald-500 hover:text-black transition-all">L2 (2500)</button>
+        <button onclick="quickSelectRecharge(5000)" class="bg-gray-800 py-2 rounded text-white hover:bg-emerald-500 hover:text-black transition-all">L3 (5000)</button>
+        <button onclick="quickSelectRecharge(10000)" class="bg-gray-800 py-2 rounded text-white hover:bg-emerald-500 hover:text-black transition-all">L4 (10000)</button>
+        <button onclick="quickSelectRecharge(20000)" class="bg-gray-800 py-2 rounded text-white hover:bg-emerald-500 hover:text-black transition-all">L5 (20000)</button>
+        <button onclick="quickSelectRecharge(50000)" class="bg-gray-800 py-2 rounded text-white hover:bg-emerald-500 hover:text-black transition-all">L6 (50000)</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-300 mb-1">Recharge Amount (ETB)</label>
+          <input type="number" id="recharge-amount" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white font-bold text-sm focus:outline-none focus:border-emerald-500" placeholder="Amount">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-300 mb-1">Receipt Ref / Transaction Number (FT)</label>
+          <input type="text" id="recharge-ref" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white tracking-wider uppercase font-bold text-sm focus:outline-none focus:border-emerald-500" placeholder="e.g. FT123456789">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-300 mb-1">Submit Receipt File (Optional)</label>
+          <input type="file" id="recharge-file" class="w-full bg-gray-950 p-2 text-xs border border-gray-800 rounded-xl text-gray-400">
+        </div>
+        <button onclick="submitDeposit()" class="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-black font-black rounded-xl shadow-lg transition-all uppercase">Submit Deposit Request</button>
+      </div>
+
+      <!-- Live User Recharge logs showing under modal -->
+      <div class="border-t border-gray-800 pt-3 max-h-32 overflow-y-auto space-y-1.5" id="modal-recharges-list"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: WITHDRAW -->
+  <div id="modal-withdraw" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="glassmorphism w-full max-w-sm rounded-3xl p-6 border border-rose-500/30 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+        <h3 class="font-black text-md text-rose-400">Withdraw Funds</h3>
+        <button onclick="closeModal('modal-withdraw')" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <!-- Payment Destination form parameters -->
+      <div class="bg-black/60 p-4 rounded-2xl border border-gray-900 space-y-3 text-xs">
+        <h4 class="font-bold text-yellow-300">Set Account Profile</h4>
+        <div>
+          <label class="block text-[10px] text-gray-400 uppercase font-black">Full Name</label>
+          <input type="text" id="withdraw-fullname-input" class="w-full bg-gray-950 p-2 mt-1 rounded border border-gray-800 text-white" placeholder="Receiver full name">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase font-black">Method Option</label>
+            <select id="withdraw-method-input" class="w-full bg-gray-950 p-2 mt-1 rounded border border-gray-800 text-white">
+              <option value="Commercial Bank of Ethiopia">CBE Bank</option>
+              <option value="Telebirr">Telebirr Mobile</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase font-black">Account / Wallet Number</label>
+            <input type="text" id="withdraw-account-input" class="w-full bg-gray-950 p-2 mt-1 rounded border border-gray-800 text-white" placeholder="Account digits">
+          </div>
+        </div>
+        <button onclick="saveAccountDetails()" class="w-full py-1.5 bg-gray-800 text-white font-bold rounded-lg hover:bg-gray-700 transition-all">Save Details</button>
+      </div>
+
+      <!-- Withdraw input parameters -->
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-300 mb-1">Amount (Min 200 ETB - 13% Service Fee)</label>
+          <input type="number" id="withdraw-amount" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white font-bold text-sm" placeholder="Minimum 200">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-300 mb-1">Passkey Verification Code</label>
+          <input type="text" id="withdraw-passkey" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white uppercase tracking-widest font-black text-sm" placeholder="Passkey">
+        </div>
+        <button onclick="submitWithdrawal()" class="w-full py-4 bg-rose-500 hover:bg-rose-600 text-white font-black rounded-xl shadow-lg transition-all uppercase">Request Withdrawal</button>
+      </div>
+
+      <!-- Floating withdrawals log list -->
+      <div class="border-t border-gray-800 pt-3 max-h-32 overflow-y-auto space-y-1.5" id="modal-withdrawals-list"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: TRANSACTIONS -->
+  <div id="modal-transactions" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="glassmorphism w-full max-w-sm rounded-3xl p-6 border border-amber-500/30 space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+        <h3 class="font-black text-md text-amber-400">Transaction Logs</h3>
+        <button onclick="closeModal('modal-transactions')" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <!-- Log category tabs -->
+      <div class="flex space-x-1.5 bg-black/40 p-1.5 rounded-lg border border-gray-800 text-[10px] font-black uppercase text-center">
+        <button onclick="setTransactionLogTab('recharge')" id="btn-tab-log-recharge" class="flex-1 py-1.5 rounded bg-amber-500 text-black">Recharge</button>
+        <button onclick="setTransactionLogTab('withdraw')" id="btn-tab-log-withdraw" class="flex-1 py-1.5 rounded text-gray-400">Withdraw</button>
+        <button onclick="setTransactionLogTab('commission')" id="btn-tab-log-comm" class="flex-1 py-1.5 rounded text-gray-400">Commission</button>
+      </div>
+
+      <div class="space-y-2 max-h-64 overflow-y-auto" id="transaction-logs-view">
+        <!-- Loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CHANGE PASSWORD -->
+  <div id="modal-change-pwd" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="glassmorphism w-full max-w-sm rounded-3xl p-6 border border-pink-500/30 space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+        <h3 class="font-black text-md text-pink-400">Update Password</h3>
+        <button onclick="closeModal('modal-change-pwd')" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3">
+        <input type="password" id="change-pwd-old" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white font-bold" placeholder="Current Password" maxlength="8">
+        <input type="password" id="change-pwd-new" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white font-bold" placeholder="New Password (8 Digits)" maxlength="8">
+        <button onclick="executePasswordChange()" class="w-full py-3.5 bg-pink-500 hover:bg-pink-600 text-white font-black rounded-xl shadow-lg transition-all">CHANGE PASSWORD</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CHANGE PASSKEY -->
+  <div id="modal-change-pkey" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="glassmorphism w-full max-w-sm rounded-3xl p-6 border border-cyan-500/30 space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+        <h3 class="font-black text-md text-cyan-400">Update Withdraw Passkey</h3>
+        <button onclick="closeModal('modal-change-pkey')" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3">
+        <input type="text" id="change-pkey-old" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white uppercase font-black" placeholder="Current Passkey" maxlength="4">
+        <input type="text" id="change-pkey-new" class="w-full bg-gray-950 p-3 border border-gray-800 rounded-xl text-white uppercase font-black" placeholder="New Passkey (2 Letters & 2 Numbers)" maxlength="4">
+        <button onclick="executePasskeyChange()" class="w-full py-3.5 bg-cyan-400 hover:bg-cyan-500 text-black font-black rounded-xl shadow-lg transition-all">CHANGE PASSKEY</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Legacy SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    // Realtime Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAXStKpo32TTHFI-K7a3iwkXbH6YU-rHdo",
+      authDomain: "fair-trade-coffe.firebaseapp.com",
+      databaseURL: "https://fair-trade-coffe-default-rtdb.firebaseio.com",
+      projectId: "fair-trade-coffe",
+      storageBucket: "fair-trade-coffe.firebasestorage.app",
+      messagingSenderId: "784464515755",
+      appId: "1:784464515755:web:aa4a510735c5533df25dee",
+      measurementId: "G-1LM3QM8375"
+    };
+
+    // Initialize Firebase Database Engine
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // App state
+    let currentUser = null;
+    let currentSecurityCode = '';
+    let selectedLogTab = 'recharge';
+
+    // Investment levels configuration (L1 - L7 with Unsplash Coffee Images)
+    const levelSettings = [
+      { id: 1, name: "Level 1", cost: 500, daily: 100, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=300&auto=format&fit=crop" },
+      { id: 2, name: "Level 2", cost: 2500, daily: 500, image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=300&auto=format&fit=crop" },
+      { id: 3, name: "Level 3", cost: 5000, daily: 1000, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=300&auto=format&fit=crop" },
+      { id: 4, name: "Level 4", cost: 10000, daily: 2000, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=300&auto=format&fit=crop" },
+      { id: 5, name: "Level 5", cost: 20000, daily: 4000, image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=300&auto=format&fit=crop" },
+      { id: 6, name: "Level 6", cost: 50000, daily: 10000, image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=300&auto=format&fit=crop" },
+      { id: 7, name: "Level 7", cost: 100000, daily: 20000, image: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=300&auto=format&fit=crop" }
+    ];
+
+    // Salary reward tiers parameters
+    const salarySettings = [
+      { id: 1, reward: 500, requirement: 5000, title: "Salary 1" },
+      { id: 2, reward: 1000, requirement: 10000, title: "Salary 2" },
+      { id: 3, reward: 3000, requirement: 30000, title: "Salary 3" },
+      { id: 4, reward: 5000, requirement: 500000, title: "Salary 4" },
+      { id: 5, reward: 10000, requirement: 100000, title: "Salary 5" },
+      { id: 6, reward: 20000, requirement: 300000, title: "Salary 6" }
+    ];
+
+    window.onload = function() {
+      // 1. Initial Welcome delay to transition splash screen
+      setTimeout(() => {
+        document.getElementById('splash-screen').classList.add('hidden');
+        
+        // Read invitation code parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const refLinkCode = urlParams.get('ref');
+        
+        if (refLinkCode) {
+          document.getElementById('reg-invite').value = refLinkCode;
+          showPage('register-page');
+        } else {
+          showPage('login-page');
+        }
+      }, 3000);
+
+      // Instantiation of validation security codes
+      generateSecurityCode();
+      document.getElementById('verif-code-box').onclick = generateSecurityCode;
+
+      // Event listeners setup
+      document.getElementById('register-form').onsubmit = executeRegister;
+      document.getElementById('login-form').onsubmit = executeLogin;
+
+      // Generate visual list elements
+      renderInvestmentLevels();
+      initHomeCarousel();
+    };
+
+    function showPage(pageId) {
+      document.getElementById('register-page').classList.add('hidden');
+      document.getElementById('login-page').classList.add('hidden');
+      document.getElementById('app-content').classList.add('hidden');
+      document.getElementById(pageId).classList.remove('hidden');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      if (id === 'modal-recharge') renderModalRecharges();
+      if (id === 'modal-withdraw') renderModalWithdrawals();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Security Verification Code Box generator
+    function generateSecurityCode() {
+      currentSecurityCode = Math.floor(1000 + Math.random() * 9000).toString();
+      document.getElementById('verif-code-box').innerText = currentSecurityCode;
+    }
+
+    // Carousel track slideshow switcher (4 seconds 16:9 ratio)
+    function initHomeCarousel() {
+      const track = document.getElementById('carousel-track');
+      const dotsContainer = document.getElementById('carousel-dots');
+      const slides = track.children;
+      let slideIndex = 0;
+
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = `w-1.5 h-1.5 rounded-full transition-all ${i === 0 ? 'bg-white w-3' : 'bg-white/40'}`;
+        dotsContainer.appendChild(dot);
+      }
+
+      setInterval(() => {
+        slideIndex = (slideIndex + 1) % slides.length;
+        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        
+        Array.from(dotsContainer.children).forEach((dot, idx) => {
+          if (idx === slideIndex) {
+            dot.className = 'w-1.5 h-1.5 rounded-full bg-white w-3 transition-all';
+          } else {
+            dot.className = 'w-1.5 h-1.5 rounded-full bg-white/40 transition-all';
+          }
+        });
+      }, 4000);
+    }
+
+    // Build the interactive Levels View elements
+    function renderInvestmentLevels() {
+      const view = document.getElementById('levels-list-view');
+      view.innerHTML = '';
+      levelSettings.forEach(set => {
+        const row = document.createElement('div');
+        row.className = "glassmorphism rounded-2xl p-4 flex items-center justify-between border-l-4 border-yellow-400";
+        row.innerHTML = `
+          <div class="flex items-center space-x-3.5">
+            <img src="${set.image}" class="w-14 h-14 object-cover rounded-xl border border-white/10" alt="${set.name}">
+            <div>
+              <h4 class="font-extrabold text-white text-md">${set.name}</h4>
+              <p class="text-xs text-yellow-300 font-bold">Invest: ${set.cost} ETB</p>
+              <p class="text-xs text-green-400 font-bold">Daily Income: ${set.daily} ETB</p>
+            </div>
+          </div>
+          <div class="text-right flex flex-col items-end space-y-1" id="action-level-${set.id}">
+            <button onclick="purchaseInvestmentLevel(${set.id})" class="bg-gradient-to-r from-yellow-500 to-orange-500 text-black py-2 px-4 rounded-xl font-black text-xs hover:scale-105 active:scale-95 transition-all">Buy</button>
+          </div>
+        `;
+        view.appendChild(row);
+      });
+    }
+
+    // Switch between navigation panels
+    function changeNavigation(tab) {
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
+      document.getElementById('view-' + tab).classList.remove('hidden');
+
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-nav-tab'));
+      document.getElementById('tab-' + tab).classList.add('active-nav-tab');
+    }
+
+    // User Registration Flow
+    async function executeRegister(e) {
+      e.preventDefault();
+
+      const phoneInput = document.getElementById('reg-phone').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const passkey = document.getElementById('reg-passkey').value.toUpperCase();
+      const verifInput = document.getElementById('reg-verif').value.trim();
+      const inviteCode = document.getElementById('reg-invite').value.trim();
+
+      // Phone verification (Strictly 10 digits starting with 0)
+      if (phoneInput.length !== 10 || isNaN(phoneInput) || !phoneInput.startsWith('0')) {
+        alert("Error: Phone number must be exactly 10 digits starting with 0!");
+        return;
+      }
+      const phone = "+251" + phoneInput;
+
+      // Password verification
+      if (password.length !== 8 || isNaN(password)) {
+        alert("Error: Password must be exactly an 8-digit number!");
+        return;
+      }
+
+      // Passkey verification regex (2 letters, 2 numbers)
+      const passkeyRegex = /^[A-Z]{2}[0-9]{2}$/;
+      if (!passkeyRegex.test(passkey)) {
+        alert("Error: Withdraw Passkey must be exactly 2 letters followed by 2 numbers (e.g., AB12)!");
+        return;
+      }
+
+      // Check Verification Code
+      if (verifInput !== currentSecurityCode) {
+        alert("Error: Security verification code does not match!");
+        generateSecurityCode();
+        return;
+      }
+
+      try {
+        const snap = await db.ref('users/' + phoneInput).once('value');
+        if (snap.exists()) {
+          alert("Error: This phone number is already registered!");
+          return;
+        }
+
+        // Generate dynamic Unique ID and Referral Code (6-digit number + FTC)
+        const randId = Math.floor(100000 + Math.random() * 900000);
+        const myInviteCode = randId + "FTC";
+
+        // Query referred parent tree to configure A, B, C commission hierarchies
+        let parentA = "";
+        let parentB = "";
+        let parentC = "";
+
+        if (inviteCode) {
+          const allUsersSnap = await db.ref('users').once('value');
+          if (allUsersSnap.exists()) {
+            allUsersSnap.forEach(userSnap => {
+              const u = userSnap.val();
+              if (u.inviteCode === inviteCode) {
+                parentA = u.phoneRaw;
+                if (u.parentA) parentB = u.parentA;
+                if (u.parentB) parentC = u.parentB;
+              }
+            });
+          }
+        }
+
+        const newUser = {
+          phone: phone,
+          phoneRaw: phoneInput,
+          password: password,
+          passkey: passkey,
+          id: randId,
+          inviteCode: myInviteCode,
+          referredBy: inviteCode || "SYSTEM",
+          parentA: parentA,
+          parentB: parentB,
+          parentC: parentC,
+          balance: 100, // 100 ETB Registration Bonus
+          registeredAt: new Date().toISOString(),
+          bankFullName: "",
+          bankName: "",
+          bankAccount: "",
+          appLink: ""
+        };
+
+        await db.ref('users/' + phoneInput).set(newUser);
+
+        // Autofill login inputs and redirect
+        document.getElementById('login-phone').value = phoneInput;
+        alert("Account registered successfully! Please log in.");
+        showPage('login-page');
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Login Flow
+    async function executeLogin(e) {
+      e.preventDefault();
+      const phoneInput = document.getElementById('login-phone').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const snap = await db.ref('users/' + phoneInput).once('value');
+        if (!snap.exists()) {
+          alert("Error: Account not found!");
+          return;
+        }
+
+        const userData = snap.val();
+        if (userData.password !== password) {
+          alert("Error: Incorrect password!");
+          return;
+        }
+
+        currentUser = userData;
+        initUserSession();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Initialize authenticated user dashboard state
+    function initUserSession() {
+      showPage('app-content');
+      changeNavigation('home');
+
+      // Populate views
+      document.getElementById('header-id').innerText = currentUser.id;
+      document.getElementById('my-profile-phone').innerText = currentUser.phone;
+      document.getElementById('my-profile-id').innerText = currentUser.id;
+      document.getElementById('my-invite-code-id').innerText = currentUser.inviteCode;
+
+      // Populate profiles if saved
+      document.getElementById('withdraw-fullname-input').value = currentUser.bankFullName || '';
+      document.getElementById('withdraw-account-input').value = currentUser.bankAccount || '';
+      if (currentUser.bankName) {
+        document.getElementById('withdraw-method-input').value = currentUser.bankName;
+      }
+      document.getElementById('app-download-link-input').value = currentUser.appLink || '';
+
+      // Realtime listener for balance adjustments
+      db.ref('users/' + currentUser.phoneRaw).on('value', snap => {
+        if (snap.exists()) {
+          currentUser = snap.val();
+          document.getElementById('user-balance').innerText = parseFloat(currentUser.balance).toFixed(2);
+        }
+      });
+
+      // Synchronize views
+      syncCommissionsOnApproval();
+      syncTeamNetwork();
+      syncSalaryLayout();
+
+      // Check daily income calculations
+      processInvestmentClaims();
+    }
+
+    // Process daily investments claims
+    async function processInvestmentClaims() {
+      const now = new Date();
+      const userRef = db.ref('users/' + currentUser.phoneRaw);
+      
+      const snap = await db.ref('purchased_levels/' + currentUser.phoneRaw).once('value');
+      if (snap.exists()) {
+        let totalIncomeAccumulated = 0;
+        let dbChangesMade = false;
+
+        snap.forEach(child => {
+          const key = child.key;
+          const data = child.val();
+
+          // Check if active limit exceeded (58 Days check)
+          const purchaseDate = new Date(data.purchasedAt);
+          const daysDiff = (now - purchaseDate) / (1000 * 60 * 60 * 24);
+
+          if (daysDiff > 58) {
+            // Expired level
+            db.ref('purchased_levels/' + currentUser.phoneRaw + '/' + key).remove();
+            
+            // Mark Level UI to indicate re-investment requirement
+            const actionDiv = document.getElementById(`action-level-${data.levelId}`);
+            if (actionDiv) {
+              actionDiv.innerHTML = `
+                <span class="text-[10px] text-red-500 font-bold block">Expired</span>
+                <button onclick="purchaseInvestmentLevel(${data.levelId})" class="bg-red-600 text-white py-1 px-3 rounded text-[10px] font-bold">Invest Again</button>
+              `;
+            }
+            return;
+          }
+
+          // Check if level is active and configure visual indicator if active
+          const actionDiv = document.getElementById(`action-level-${data.levelId}`);
+          if (actionDiv) {
+            actionDiv.innerHTML = `<span class="bg-green-500/20 text-green-400 font-bold border border-green-500/30 px-3 py-1 rounded text-xs">Active</span>`;
+          }
+
+          // Calculate earned income blocks of 24h
+          const lastClaimDate = new Date(data.lastClaimAt);
+          const hoursPassed = (now - lastClaimDate) / (1000 * 60 * 60);
+
+          if (hoursPassed >= 24) {
+            const periods = Math.floor(hoursPassed / 24);
+            const payout = data.daily * periods;
+            totalIncomeAccumulated += payout;
+
+            // Update timestamp
+            const updatedClaimTime = new Date(lastClaimDate.getTime() + (periods * 24 * 60 * 60 * 1000));
+            db.ref('purchased_levels/' + currentUser.phoneRaw + '/' + key + '/lastClaimAt').set(updatedClaimTime.toISOString());
+            dbChangesMade = true;
+
+            // Pay daily income commission uplines (A: 3%, B: 2%, C: 1%)
+            executeCommissionDistributions(payout, 'daily');
+          }
+        });
+
+        if (dbChangesMade && totalIncomeAccumulated > 0) {
+          const newBal = parseFloat(currentUser.balance) + totalIncomeAccumulated;
+          await userRef.child('balance').set(newBal);
+
+          // Write record to transaction logs
+          await db.ref('transactions/' + currentUser.phoneRaw + '/earnings').push({
+            type: "Daily Investment Income",
+            amount: totalIncomeAccumulated,
+            date: now.toISOString()
+          });
+
+          alert(`Daily earnings of ${totalIncomeAccumulated} ETB were credited to your balance!`);
+        }
+      }
+    }
+
+    // Deposit and Daily earnings commissions distribution
+    async function executeCommissionDistributions(baseAmount, type) {
+      const now = new Date().toISOString();
+
+      // Upline A (Direct referrer)
+      if (currentUser.parentA) {
+        const rate = type === 'deposit' ? 0.20 : 0.03;
+        const commAmt = baseAmount * rate;
+        await creditUplineCommission(currentUser.parentA, commAmt, 'A', type, now);
+      }
+
+      // Upline B
+      if (currentUser.parentB) {
+        const rate = type === 'deposit' ? 0.03 : 0.02;
+        const commAmt = baseAmount * rate;
+        await creditUplineCommission(currentUser.parentB, commAmt, 'B', type, now);
+      }
+
+      // Upline C
+      if (currentUser.parentC) {
+        const rate = type === 'deposit' ? 0.01 : 0.01;
+        const commAmt = baseAmount * rate;
+        await creditUplineCommission(currentUser.parentC, commAmt, 'C', type, now);
+      }
+    }
+
+    async function creditUplineCommission(parentPhoneRaw, amount, teamLevel, commissionType, timestamp) {
+      const snap = await db.ref('users/' + parentPhoneRaw).once('value');
+      if (snap.exists()) {
+        const parent = snap.val();
+        const updatedBal = parseFloat(parent.balance) + amount;
+        await db.ref('users/' + parentPhoneRaw + '/balance').set(updatedBal);
+
+        // Record log entries
+        await db.ref('commissions/' + parentPhoneRaw).push({
+          amount: amount,
+          fromPhone: currentUser.phoneRaw,
+          fromId: currentUser.id,
+          teamLevel: teamLevel,
+          type: commissionType === 'deposit' ? "Deposit Commission" : "Daily Revenue Commission",
+          date: timestamp
+        });
+      }
+    }
+
+    // Monitor deposit status and execute commissions upon approvals
+    function syncCommissionsOnApproval() {
+      db.ref('recharges/' + currentUser.phoneRaw).on('child_changed', async snapshot => {
+        const data = snapshot.val();
+        if (data.status === "Deposited" && !data.commissionsDisbursed) {
+          // Trigger Commission Distributions (A: 20%, B: 3%, C: 1%)
+          await executeCommissionDistributions(parseFloat(data.amount), 'deposit');
+          
+          // Mark deposit processed to prevent duplicate commissions
+          await db.ref('recharges/' + currentUser.phoneRaw + '/' + snapshot.key + '/commissionsDisbursed').set(true);
+        }
+      });
+    }
+
+    // Copying address clipboards
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+      alert("CBE Account Number copied successfully!");
+    }
+
+    function quickSelectRecharge(amount) {
+      document.getElementById('recharge-amount').value = amount;
+    }
+
+    // Submit Recharge deposit records
+    async function submitDeposit() {
+      const amount = parseFloat(document.getElementById('recharge-amount').value);
+      const ref = document.getElementById('recharge-ref').value.trim();
+
+      if (!amount || amount <= 0) {
+        alert("Error: Please enter a valid recharge amount!");
+        return;
+      }
+      if (!ref) {
+        alert("Error: Please input the Receipt FT Reference code!");
+        return;
+      }
+
+      const rechargeReq = {
+        amount: amount,
+        ref: ref,
+        date: new Date().toISOString(),
+        status: "Pending",
+        commissionsDisbursed: false
+      };
+
+      try {
+        await db.ref('recharges/' + currentUser.phoneRaw).push(rechargeReq);
+        alert("Deposit submitted successfully! Status is currently Pending.");
+        closeModal('modal-recharge');
+        renderModalRecharges();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Render deposits list inside the recharge modal
+    async function renderModalRecharges() {
+      const container = document.getElementById('modal-recharges-list');
+      container.innerHTML = '';
+      
+      const snap = await db.ref('recharges/' + currentUser.phoneRaw).once('value');
+      if (snap.exists()) {
+        snap.forEach(child => {
+          const data = child.val();
+          const div = document.createElement('div');
+          div.className = "flex justify-between items-center text-[10px] bg-black/40 p-2 rounded border border-gray-900";
+          div.innerHTML = `
+            <div>
+              <span class="font-bold text-white">+${data.amount} ETB</span>
+              <span class="text-gray-500 block">${new Date(data.date).toLocaleDateString()}</span>
+            </div>
+            <span class="font-black ${data.status === 'Deposited' ? 'text-green-400' : 'text-yellow-400'}">${data.status === 'Deposited' ? 'Deposited' : 'Pending'}</span>
+          `;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    // Save receiver banking credentials
+    async function saveAccountDetails() {
+      const fullName = document.getElementById('withdraw-fullname-input').value.trim();
+      const method = document.getElementById('withdraw-method-input').value;
+      const account = document.getElementById('withdraw-account-input').value.trim();
+
+      if (!fullName || !account) {
+        alert("Error: Please populate all account registration fields!");
+        return;
+      }
+
+      try {
+        await db.ref('users/' + currentUser.phoneRaw).update({
+          bankFullName: fullName,
+          bankName: method,
+          bankAccount: account
+        });
+        alert("Receiving accounts saved successfully!");
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Submit withdrawal request limits validation
+    async function submitWithdrawal() {
+      const today = new Date();
+      // Block Sunday withdrawals
+      if (today.getDay() === 0) {
+        alert("Error: Withdrawals are blocked on Sundays!");
+        return;
+      }
+
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      const passkey = document.getElementById('withdraw-passkey').value.toUpperCase();
+
+      if (!amount || amount < 200) {
+        alert("Error: Minimum withdrawal is 200 ETB!");
+        return;
+      }
+
+      if (passkey !== currentUser.passkey) {
+        alert("Error: Passkey verification incorrect!");
+        return;
+      }
+
+      if (parseFloat(currentUser.balance) < amount) {
+        alert("Error: Insufficient balance!");
+        return;
+      }
+
+      if (!currentUser.bankAccount || !currentUser.bankFullName) {
+        alert("Error: Please set and save your account profile details first!");
+        return;
+      }
+
+      try {
+        // Enforce once per day limits
+        const snap = await db.ref('withdrawals/' + currentUser.phoneRaw).once('value');
+        let dailyLimitViolation = false;
+        const todayStr = today.toDateString();
+
+        if (snap.exists()) {
+          snap.forEach(child => {
+            if (new Date(child.val().date).toDateString() === todayStr) {
+              dailyLimitViolation = true;
+            }
+          });
+        }
+
+        if (dailyLimitViolation) {
+          alert("Error: You can only withdraw once per day!");
+          return;
+        }
+
+        const fee = amount * 0.13;
+        const withdrawReq = {
+          amount: amount,
+          fee: fee,
+          date: today.toISOString(),
+          status: "Pending"
+        };
+
+        // Post request
+        await db.ref('withdrawals/' + currentUser.phoneRaw).push(withdrawReq);
+
+        // Deduct balance immediately
+        const updatedBal = parseFloat(currentUser.balance) - amount;
+        await db.ref('users/' + currentUser.phoneRaw + '/balance').set(updatedBal);
+
+        alert("Withdrawal submitted! Status is currently Pending.");
+        closeModal('modal-withdraw');
+        renderModalWithdrawals();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Render withdrawals logs inside withdrawal modal
+    async function renderModalWithdrawals() {
+      const container = document.getElementById('modal-withdrawals-list');
+      container.innerHTML = '';
+
+      const snap = await db.ref('withdrawals/' + currentUser.phoneRaw).once('value');
+      if (snap.exists()) {
+        snap.forEach(child => {
+          const data = child.val();
+          const div = document.createElement('div');
+          div.className = "flex justify-between items-center text-[10px] bg-black/40 p-2 rounded border border-gray-900";
+          div.innerHTML = `
+            <div>
+              <span class="font-bold text-white">-${data.amount} ETB</span>
+              <span class="text-gray-500 block">${new Date(data.date).toLocaleDateString()}</span>
+            </div>
+            <span class="font-black ${data.status === 'Successful' ? 'text-green-400' : 'text-yellow-400'}">${data.status === 'Successful' ? 'Successful' : 'Pending'}</span>
+          `;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    // Purchase levels
+    async function purchaseInvestmentLevel(levelId) {
+      const set = levelSettings.find(l => l.id === levelId);
+      if (parseFloat(currentUser.balance) < set.cost) {
+        alert("Error: Insufficient balance! Please recharge your account first.");
+        return;
+      }
+
+      const confirmBuy = confirm(`Purchase ${set.name} for ${set.cost} ETB?`);
+      if (!confirmBuy) return;
+
+      try {
+        const now = new Date();
+        const purchaseRecord = {
+          levelId: set.id,
+          levelName: set.name,
+          cost: set.cost,
+          daily: set.daily,
+          purchasedAt: now.toISOString(),
+          lastClaimAt: now.toISOString(),
+          expiresAt: new Date(now.getTime() + (58 * 24 * 60 * 60 * 1000)).toISOString()
+        };
+
+        // Deduct costs
+        const updatedBal = parseFloat(currentUser.balance) - set.cost;
+        await db.ref('users/' + currentUser.phoneRaw + '/balance').set(updatedBal);
+
+        // Record investment levels
+        await db.ref('purchased_levels/' + currentUser.phoneRaw).push(purchaseRecord);
+
+        alert(`Successfully purchased ${set.name}!`);
+        renderInvestmentLevels();
+        processInvestmentClaims();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Claim daily treasure codes
+    async function claimTreasureCode() {
+      const codeInput = document.getElementById('treasure-code-input').value.trim().toUpperCase();
+      if (!codeInput) {
+        alert("Error: Please enter a code!");
+        return;
+      }
+
+      try {
+        const snap = await db.ref('treasure_codes/' + codeInput).once('value');
+        if (!snap.exists()) {
+          alert("Error: Invalid or expired treasure code!");
+          return;
+        }
+
+        const data = snap.val();
+
+        if (data.uses >= 10) {
+          alert("Today's Treasure Code Expired");
+          return;
+        }
+
+        // Already claimed check
+        let alreadyClaimed = false;
+        if (data.claimedUsers) {
+          if (Object.values(data.claimedUsers).includes(currentUser.phoneRaw)) {
+            alreadyClaimed = true;
+          }
+        }
+
+        if (alreadyClaimed) {
+          alert("Error: You already used this treasure code!");
+          return;
+        }
+
+        // Apply claims
+        const updatedUses = parseInt(data.uses) + 1;
+        await db.ref('treasure_codes/' + codeInput + '/uses').set(updatedUses);
+        await db.ref('treasure_codes/' + codeInput + '/claimedUsers').push(currentUser.phoneRaw);
+
+        // Add 25 ETB
+        const updatedBal = parseFloat(currentUser.balance) + 25;
+        await db.ref('users/' + currentUser.phoneRaw + '/balance').set(updatedBal);
+
+        // Log transaction history
+        await db.ref('transactions/' + currentUser.phoneRaw + '/earnings').push({
+          type: "Treasure Reward",
+          amount: 25,
+          date: new Date().toISOString()
+        });
+
+        alert("Congratulations! 25 ETB has been credited to your balance.");
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Sync salary features Layout
+    async function syncSalaryLayout() {
+      const view = document.getElementById('salary-perks-view');
+      view.innerHTML = '';
+
+      // Count Team Deposits (A & B)
+      const teamTotals = await calculateTeamDeposits();
+      const combinedDeposits = teamTotals.teamA + teamTotals.teamB;
+
+      salarySettings.forEach(sal => {
+        const isEligible = combinedDeposits >= sal.requirement;
+        const row = document.createElement('div');
+        row.className = `p-4 rounded-xl flex items-center justify-between border ${isEligible ? 'bg-emerald-950/40 border-emerald-500' : 'bg-gray-900/60 border-gray-800'}`;
+        row.innerHTML = `
+          <div>
+            <h4 class="font-extrabold text-xs ${isEligible ? 'text-emerald-400' : 'text-gray-300'}">${sal.title} (${sal.reward} ETB)</h4>
+            <p class="text-[9px] text-gray-400 font-bold">Team A+B deposits: ${combinedDeposits.toFixed(2)} / ${sal.requirement} ETB</p>
+          </div>
+          <button onclick="claimSalaryRewards(${sal.id}, ${sal.reward}, ${isEligible})" class="py-2 px-4 rounded-lg font-bold text-[10px] ${isEligible ? 'bg-emerald-500 text-black hover:scale-105 active:scale-95' : 'bg-gray-800 text-gray-500 cursor-not-allowed'} transition-all">Claim</button>
+        `;
+        view.appendChild(row);
+      });
+    }
+
+    // Calculate deposits of Downlines (A & B)
+    async function calculateTeamDeposits() {
+      let teamA = 0;
+      let teamB = 0;
+
+      const usersSnap = await db.ref('users').once('value');
+      const allUsers = [];
+      usersSnap.forEach(child => { allUsers.push(child.val()); });
+
+      // Direct referrals (Level A)
+      const levelA = allUsers.filter(u => u.referredBy === currentUser.inviteCode);
+      for (const uA of levelA) {
+        const depA = await getApprovedDepositsTotal(uA.phoneRaw);
+        teamA += depA;
+
+        // Level B referrals
+        const levelB = allUsers.filter(u => u.referredBy === uA.inviteCode);
+        for (const uB of levelB) {
+          const depB = await getApprovedDepositsTotal(uB.phoneRaw);
+          teamB += depB;
+        }
+      }
+
+      return { teamA, teamB };
+    }
+
+    async function getApprovedDepositsTotal(phoneRaw) {
+      let sum = 0;
+      const snap = await db.ref('recharges/' + phoneRaw).once('value');
+      if (snap.exists()) {
+        snap.forEach(child => {
+          if (child.val().status === 'Deposited') {
+            sum += parseFloat(child.val().amount);
+          }
+        });
+      }
+      return sum;
+    }
+
+    // Claim rewards of Salary
+    async function claimSalaryRewards(salaryId, reward, isEligible) {
+      if (!isEligible) {
+        alert("Error: Your team deposits do not meet the minimum requirement!");
+        return;
+      }
+
+      try {
+        const check = await db.ref('claimed_salaries/' + currentUser.phoneRaw + '/' + salaryId).once('value');
+        if (check.exists()) {
+          alert("Error: You already claimed this salary!");
+          return;
+        }
+
+        // Set claimed state
+        await db.ref('claimed_salaries/' + currentUser.phoneRaw + '/' + salaryId).set(true);
+
+        const updatedBal = parseFloat(currentUser.balance) + reward;
+        await db.ref('users/' + currentUser.phoneRaw + '/balance').set(updatedBal);
+
+        // Transaction log
+        await db.ref('transactions/' + currentUser.phoneRaw + '/earnings').push({
+          type: `Salary Reward ${salaryId}`,
+          amount: reward,
+          date: new Date().toISOString()
+        });
+
+        alert(`Successfully claimed ${reward} ETB Salary!`);
+        syncSalaryLayout();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Copy branded Referral share packages (Strictly branded with "fair-trade-coffe")
+    function copySharePackage() {
+      const shareUrl = "https://fair-trade-coffe.firebaseapp.com/?ref=" + currentUser.inviteCode;
+      const text = `Join Fair Trade Coffee (FTC)! Invest and earn passive income daily. Register now to claim your 100 ETB Bonus!\n\nRegistration Link: ${shareUrl}\nInvite Code: ${currentUser.inviteCode}`;
+      navigator.clipboard.writeText(text);
+      alert("Branded Invite Link & Code copied to clipboard!");
+    }
+
+    // Synchronize direct & indirect team table
+    async function syncTeamNetwork() {
+      const tbody = document.getElementById('network-table-body');
+      tbody.innerHTML = '';
+
+      try {
+        const usersSnap = await db.ref('users').once('value');
+        const commsSnap = await db.ref('commissions/' + currentUser.phoneRaw).once('value');
+
+        let allComms = [];
+        if (commsSnap.exists()) {
+          commsSnap.forEach(child => { allComms.push(child.val()); });
+        }
+
+        const allUsers = [];
+        usersSnap.forEach(child => { allUsers.push(child.val()); });
+
+        // Find downs
+        const levelA = allUsers.filter(u => u.referredBy === currentUser.inviteCode);
+        let rowAdded = false;
+
+        const addRow = (user, lvl) => {
+          rowAdded = true;
+          // Mask phone middle digits (+25109****123)
+          const raw = user.phoneRaw;
+          const masked = `+251${raw.substring(1, 3)}****${raw.substring(7)}`;
+
+          const userComm = allComms
+            .filter(c => c.fromId === user.id)
+            .reduce((sum, item) => sum + parseFloat(item.amount), 0);
+
+          const tr = document.createElement('tr');
+          tr.className = "border-b border-gray-950 text-gray-300 text-xs";
+          tr.innerHTML = `
+            <td class="py-3">
+              <span class="block font-bold">${masked}</span>
+              <span class="text-[9px] text-gray-500">ID: ${user.id}</span>
+            </td>
+            <td class="py-3">
+              <span class="bg-cyan-500/10 text-cyan-400 font-bold px-2 py-0.5 rounded border border-cyan-500/20 text-[10px]">Level ${lvl}</span>
+            </td>
+            <td class="py-3 text-right font-bold text-emerald-400">+${userComm.toFixed(2)} ETB</td>
+          `;
+          tbody.appendChild(tr);
+        };
+
+        for (const uA of levelA) {
+          addRow(uA, 'A');
+
+          const levelB = allUsers.filter(u => u.referredBy === uA.inviteCode);
+          for (const uB of levelB) {
+            addRow(uB, 'B');
+
+            const levelC = allUsers.filter(u => u.referredBy === uB.inviteCode);
+            for (const uC of levelC) {
+              addRow(uC, 'C');
+            }
+          }
+        }
+
+        if (!rowAdded) {
+          tbody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">No downline records.</td></tr>`;
+        }
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Set transactional logs tabs
+    function setTransactionLogTab(tab) {
+      selectedLogTab = tab;
+
+      document.getElementById('btn-tab-log-recharge').className = `flex-1 py-1.5 rounded ${tab === 'recharge' ? 'bg-amber-500 text-black' : 'text-gray-400'}`;
+      document.getElementById('btn-tab-log-withdraw').className = `flex-1 py-1.5 rounded ${tab === 'withdraw' ? 'bg-amber-500 text-black' : 'text-gray-400'}`;
+      document.getElementById('btn-tab-log-comm').className = `flex-1 py-1.5 rounded ${tab === 'commission' ? 'bg-amber-500 text-black' : 'text-gray-400'}`;
+
+      syncTransactionsHistory();
+    }
+
+    // Synchronize transactions log views
+    async function syncTransactionsHistory() {
+      const container = document.getElementById('transaction-logs-view');
+      container.innerHTML = '';
+
+      try {
+        if (selectedLogTab === 'recharge') {
+          const snap = await db.ref('recharges/' + currentUser.phoneRaw).once('value');
+          if (!snap.exists()) {
+            container.innerHTML = `<p class="text-center text-xs py-4 text-gray-500">No recharge logs.</p>`;
+            return;
+          }
+          snap.forEach(child => {
+            const data = child.val();
+            const div = document.createElement('div');
+            div.className = "bg-black/40 p-3 rounded-xl border border-gray-900 text-xs flex justify-between items-center";
+            div.innerHTML = `
+              <div>
+                <span class="block font-bold text-white">+${data.amount} ETB</span>
+                <span class="text-[9px] text-gray-500 block">Ref: ${data.ref}</span>
+                <span class="text-[9px] text-gray-500">${new Date(data.date).toLocaleString()}</span>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${data.status === 'Deposited' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">
+                ${data.status === 'Deposited' ? 'Deposited' : 'Pending'}
+              </span>
+            `;
+            container.appendChild(div);
+          });
+
+        } else if (selectedLogTab === 'withdraw') {
+          const snap = await db.ref('withdrawals/' + currentUser.phoneRaw).once('value');
+          if (!snap.exists()) {
+            container.innerHTML = `<p class="text-center text-xs py-4 text-gray-500">No withdrawal logs.</p>`;
+            return;
+          }
+          snap.forEach(child => {
+            const data = child.val();
+            const div = document.createElement('div');
+            div.className = "bg-black/40 p-3 rounded-xl border border-gray-900 text-xs flex justify-between items-center";
+            div.innerHTML = `
+              <div>
+                <span class="block font-bold text-white">-${data.amount} ETB</span>
+                <span class="text-[9px] text-gray-400 block">Fee 13%: ${data.fee.toFixed(2)} ETB</span>
+                <span class="text-[9px] text-gray-500">${new Date(data.date).toLocaleString()}</span>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${data.status === 'Successful' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}">
+                ${data.status === 'Successful' ? 'Successful' : 'Pending'}
+              </span>
+            `;
+            container.appendChild(div);
+          });
+
+        } else if (selectedLogTab === 'commission') {
+          const snap = await db.ref('commissions/' + currentUser.phoneRaw).once('value');
+          if (!snap.exists()) {
+            container.innerHTML = `<p class="text-center text-xs py-4 text-gray-500">No commission logs.</p>`;
+            return;
+          }
+          snap.forEach(child => {
+            const data = child.val();
+            const div = document.createElement('div');
+            div.className = "bg-black/40 p-3 rounded-xl border border-gray-900 text-xs flex justify-between items-center";
+            div.innerHTML = `
+              <div>
+                <span class="block font-bold text-emerald-400">+${parseFloat(data.amount).toFixed(2)} ETB</span>
+                <span class="text-[9px] text-gray-400 block">${data.type} (Level ${data.teamLevel})</span>
+                <span class="text-[9px] text-gray-500">${new Date(data.date).toLocaleString()}</span>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Success</span>
+            `;
+            container.appendChild(div);
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Save app download URL configuration
+    async function saveAppDownloadLink() {
+      const link = document.getElementById('app-download-link-input').value.trim();
+      if (!link) {
+        alert("Error: Please enter a valid URL!");
+        return;
+      }
+      try {
+        await db.ref('users/' + currentUser.phoneRaw + '/appLink').set(link);
+        alert("App download link updated successfully!");
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Execute password change
+    async function executePasswordChange() {
+      const oldPwd = document.getElementById('change-pwd-old').value;
+      const newPwd = document.getElementById('change-pwd-new').value;
+
+      if (oldPwd !== currentUser.password) {
+        alert("Error: Incorrect current password!");
+        return;
+      }
+      if (newPwd.length !== 8 || isNaN(newPwd)) {
+        alert("Error: New password must be exactly an 8-digit number!");
+        return;
+      }
+
+      try {
+        await db.ref('users/' + currentUser.phoneRaw + '/password').set(newPwd);
+        alert("Password updated successfully!");
+        closeModal('modal-change-pwd');
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Execute Passkey change
+    async function executePasskeyChange() {
+      const oldPkey = document.getElementById('change-pkey-old').value.toUpperCase();
+      const newPkey = document.getElementById('change-pkey-new').value.toUpperCase();
+
+      if (oldPkey !== currentUser.passkey) {
+        alert("Error: Incorrect current passkey!");
+        return;
+      }
+
+      const passkeyRegex = /^[A-Z]{2}[0-9]{2}$/;
+      if (!passkeyRegex.test(newPkey)) {
+        alert("Error: New passkey must be exactly 2 letters followed by 2 numbers (e.g., AB12)!");
+        return;
+      }
+
+      try {
+        await db.ref('users/' + currentUser.phoneRaw + '/passkey').set(newPkey);
+        alert("Passkey updated successfully!");
+        closeModal('modal-change-pkey');
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Logout
+    function triggerSignout() {
+      currentUser = null;
+      db.ref('users').off(); // Remove listeners
+      showPage('login-page');
+    }
+  </script>
+</body>
+</html>
