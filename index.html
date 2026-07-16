@@ -353,13 +353,13 @@
             <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
           </button>
 
-          <!-- App Download URL Configuration -->
-          <div class="p-4 space-y-2">
-            <label class="block text-[10px] font-bold text-gray-400 uppercase">App Link Configuration</label>
-            <div class="flex space-x-2">
-              <input type="text" id="app-download-link-input" class="flex-1 bg-gray-950 p-2 border border-gray-800 rounded-lg text-xs text-white" placeholder="https://yourdomain.com/app.apk">
-              <button onclick="saveAppDownloadLink()" class="bg-emerald-500 text-black px-4 py-2 rounded-lg font-black text-xs hover:bg-emerald-400">Save</button>
-            </div>
+          <!-- App Download Interface Section -->
+          <div class="p-4 space-y-2 text-center bg-white/5">
+            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Official Mobile Application</label>
+            <button onclick="triggerAppDownload()" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-black font-black rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-lg">
+              <i class="fa-solid fa-download text-base"></i>
+              <span>DOWNLOAD APP</span>
+            </button>
           </div>
         </div>
 
@@ -573,6 +573,12 @@
     let currentSecurityCode = '';
     let selectedLogTab = 'recharge';
 
+    // -------------------------------------------------------------------------
+    // OFFICIAL MOBILE APP DOWNLOAD CONFIGURATION
+    // -------------------------------------------------------------------------
+    // ይህንን አድራሻ እርስዎ ወደሰቀሉት (Host ወደአደረጉት) ትክክለኛ የ APK ፋይል ሊንክ ይቀይሩት።
+    const APP_DOWNLOAD_URL = "https://github.com/your-username/your-repo/releases/download/v1.0.0/app.apk"; 
+
     // Investment levels configuration (L1 - L7 with Unsplash Coffee Images)
     const levelSettings = [
       { id: 1, name: "Level 1", cost: 500, daily: 100, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=300&auto=format&fit=crop" },
@@ -662,15 +668,19 @@
 
       setInterval(() => {
         slideIndex = (slideIndex + 1) % slides.length;
-        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        if (track) {
+          track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
         
-        Array.from(dotsContainer.children).forEach((dot, idx) => {
-          if (idx === slideIndex) {
-            dot.className = 'w-1.5 h-1.5 rounded-full bg-white w-3 transition-all';
-          } else {
-            dot.className = 'w-1.5 h-1.5 rounded-full bg-white/40 transition-all';
-          }
-        });
+        if (dotsContainer) {
+          Array.from(dotsContainer.children).forEach((dot, idx) => {
+            if (idx === slideIndex) {
+              dot.className = 'w-1.5 h-1.5 rounded-full bg-white w-3 transition-all';
+            } else {
+              dot.className = 'w-1.5 h-1.5 rounded-full bg-white/40 transition-all';
+            }
+          });
+        }
       }, 4000);
     }
 
@@ -847,7 +857,6 @@
       if (currentUser.bankName) {
         document.getElementById('withdraw-method-input').value = currentUser.bankName;
       }
-      document.getElementById('app-download-link-input').value = currentUser.appLink || '';
 
       // Realtime listener for balance adjustments
       db.ref('users/' + currentUser.phoneRaw).on('value', snap => {
@@ -1376,9 +1385,10 @@
       }
     }
 
-    // Copy branded Referral share packages (Strictly branded with "fair-trade-coffe")
+    // Copy branded Referral share packages (Support dynamic multi-host platforms like GitHub/Render)
     function copySharePackage() {
-      const shareUrl = "https://fair-trade-coffe.firebaseapp.com/?ref=" + currentUser.inviteCode;
+      // Firebase Hosting አድራሻን ከመጠቀም ይልቅ አፑ የቆመበትን የአሁኑን ሊንክ በራስ-ሰር ይይዛል።
+      const shareUrl = window.location.origin + window.location.pathname + "?ref=" + currentUser.inviteCode;
       const text = `Join Fair Trade Coffee (FTC)! Invest and earn passive income daily. Register now to claim your 100 ETB Bonus!\n\nRegistration Link: ${shareUrl}\nInvite Code: ${currentUser.inviteCode}`;
       navigator.clipboard.writeText(text);
       alert("Branded Invite Link & Code copied to clipboard!");
@@ -1542,18 +1552,14 @@
       }
     }
 
-    // Save app download URL configuration
-    async function saveAppDownloadLink() {
-      const link = document.getElementById('app-download-link-input').value.trim();
-      if (!link) {
-        alert("Error: Please enter a valid URL!");
-        return;
-      }
-      try {
-        await db.ref('users/' + currentUser.phoneRaw + '/appLink').set(link);
-        alert("App download link updated successfully!");
-      } catch (err) {
-        alert("Error: " + err.message);
+    // Execute Download App Action
+    function triggerAppDownload() {
+      // በቀድሞው መሠረት ተጠቃሚው የራሱ የ appLink ዳታቤዝ ላይ ካለው እሱን ይወስዳል፤ ካልሆነ ግን ኮዱ ላይ የተቀመጠውን ዋና APK ሊንክ ይጠቀማል።
+      const link = (currentUser && currentUser.appLink) ? currentUser.appLink : APP_DOWNLOAD_URL;
+      if (link && link !== "#") {
+        window.open(link, '_blank');
+      } else {
+        alert("Download link is currently unavailable!");
       }
     }
 
