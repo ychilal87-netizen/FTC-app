@@ -630,7 +630,8 @@
     // -------------------------------------------------------------------------
     // OFFICIAL MOBILE APP DOWNLOAD CONFIGURATION
     // -------------------------------------------------------------------------
-    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC"; 
+    // ማስታወሻ፡ በ Github ላይ የጫኑት የ APK ፋይል ስም 'FTC.apk' ካልሆነ፣ እቺን ስም በትክክለኛው የፋይልዎ ስም (ለምሳሌ app-release.apk) ይቀይሯት።
+    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/download/FTC/app-release.apk"; 
 
     // Investment levels configuration (L1 - L7 with Unsplash Coffee Images)
     const levelSettings = [
@@ -1723,8 +1724,12 @@
 
     // Execute Download App Action
     function triggerAppDownload() {
-      const link = 'https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC';
-      window.open(link, '_blank');
+      const link = (currentUser && currentUser.appLink) ? currentUser.appLink : APP_DOWNLOAD_URL;
+      if (link && link !== "#") {
+        window.location.href = link; // Directly triggers browser download
+      } else {
+        alert("Download link is currently unavailable!");
+      }
     }
 
     // Execute password change
