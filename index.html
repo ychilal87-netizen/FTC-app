@@ -227,7 +227,7 @@
                 <h4 class="font-extrabold text-xs text-[#2e1e12]">ክፍል 1፡ የኢንቨስትመንት ደረጃዎችና የዕለት ገቢ</h4>
               </div>
               <p class="text-[11px] text-[#5c4434] leading-relaxed">
-                በ FTC 7 የተለያዩ የኢንቨስትመንት ደረጃዎች አሉ (L1 እስከ L7)። በትንሽ መነሻ 500 ETB ኢንቨስት በማድረግ በየቀኑ 100 ETB ማግኘት የሚጀምሩ ሲሆን፣ ከፍተኛው ደረጃ L7 (100,000 ETB) ዕለታዊ ገቢው 20,000 ETB ነው። እያንዳንዱ ደረጃ ለ 58 ቀናት ያገለግላል።
+                በ FTC 7 የተለያዩ የኢንቨስትመንት ደረጃዎች አሉ (L1 እስከ L7)። በትንሽ መነሻ 500 ETB ኢንቨስት በማድረግ በየቀኑ 50 ETB ማግኘት የሚጀምሩ ሲሆን፣ ከፍተኛው ደረጃ L7 (100,000 ETB) ዕለታዊ ገቢው 10,000 ETB ነው። እያንዳንዱ ደረጃ ለ 58 ቀናት ያገለግላል።
               </p>
             </div>
 
@@ -630,18 +630,17 @@
     // -------------------------------------------------------------------------
     // OFFICIAL MOBILE APP DOWNLOAD CONFIGURATION
     // -------------------------------------------------------------------------
-    // ማስታወሻ፡ በ Github ላይ የጫኑት የ APK ፋይል ስም 'FTC.apk' ካልሆነ፣ እቺን ስም በትክክለኛው የፋይልዎ ስም (ለምሳሌ app-release.apk) ይቀይሯት።
-    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/download/FTC/app-release.apk"; 
+    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC"; 
 
-    // Investment levels configuration (L1 - L7 with Unsplash Coffee Images)
+    // Investment levels configuration (L1 - L7 with Unsplash Coffee Images - Updated to 10% Daily Income)
     const levelSettings = [
-      { id: 1, name: "Level 1", cost: 500, daily: 100, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=300&auto=format&fit=crop" },
-      { id: 2, name: "Level 2", cost: 2500, daily: 500, image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=300&auto=format&fit=crop" },
-      { id: 3, name: "Level 3", cost: 5000, daily: 1000, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=300&auto=format&fit=crop" },
-      { id: 4, name: "Level 4", cost: 10000, daily: 2000, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=300&auto=format&fit=crop" },
-      { id: 5, name: "Level 5", cost: 20000, daily: 4000, image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=300&auto=format&fit=crop" },
-      { id: 6, name: "Level 6", cost: 50000, daily: 10000, image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=300&auto=format&fit=crop" },
-      { id: 7, name: "Level 7", cost: 100000, daily: 20000, image: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=300&auto=format&fit=crop" }
+      { id: 1, name: "Level 1", cost: 500, daily: 50, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=300&auto=format&fit=crop" },
+      { id: 2, name: "Level 2", cost: 2500, daily: 250, image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=300&auto=format&fit=crop" },
+      { id: 3, name: "Level 3", cost: 5000, daily: 500, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=300&auto=format&fit=crop" },
+      { id: 4, name: "Level 4", cost: 10000, daily: 1000, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=300&auto=format&fit=crop" },
+      { id: 5, name: "Level 5", cost: 20000, daily: 2000, image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=300&auto=format&fit=crop" },
+      { id: 6, name: "Level 6", cost: 50000, daily: 5000, image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=300&auto=format&fit=crop" },
+      { id: 7, name: "Level 7", cost: 100000, daily: 10000, image: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?q=80&w=300&auto=format&fit=crop" }
     ];
 
     // Salary reward tiers parameters
@@ -695,10 +694,6 @@
       document.getElementById(id).classList.remove('hidden');
       if (id === 'modal-recharge') renderModalRecharges();
       if (id === 'modal-withdraw') renderModalWithdrawals();
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
     }
 
     // Security Verification Code Box generator
@@ -776,7 +771,7 @@
       document.getElementById('tab-' + tab).classList.add('active-nav-tab');
     }
 
-    // User Registration Flow
+    // User Registration Flow (Includes activeLevel: 0)
     async function executeRegister(e) {
       e.preventDefault();
 
@@ -855,6 +850,7 @@
           parentB: parentB,
           parentC: parentC,
           balance: 100, // 100 ETB Registration Bonus
+          activeLevel: 0, // Set Level 0 as registration baseline
           registeredAt: new Date().toISOString(),
           bankFullName: "",
           bankName: "",
@@ -966,6 +962,11 @@
             }
           });
 
+          // Sync database activeLevel property for downline visibility
+          if ((currentUser.activeLevel || 0) !== maxActiveLevelId) {
+            await db.ref('users/' + currentUser.phoneRaw + '/activeLevel').set(maxActiveLevelId);
+          }
+
           // Second pass: Process claims and update UI
           snap.forEach(child => {
             const key = child.key;
@@ -1036,6 +1037,11 @@
             });
 
             alert(`Daily earnings of ${totalIncomeAccumulated} ETB were credited to your balance!`);
+          }
+        } else {
+          // No investment levels purchased, confirm active level matches 0
+          if ((currentUser.activeLevel || 0) !== 0) {
+            await db.ref('users/' + currentUser.phoneRaw + '/activeLevel').set(0);
           }
         }
       } catch (err) {
@@ -1338,7 +1344,7 @@
       }
     }
 
-    // Purchase levels
+    // Purchase levels (Updates activeLevel field in DB)
     async function purchaseInvestmentLevel(levelId) {
       const set = levelSettings.find(l => l.id === levelId);
       if (parseFloat(currentUser.balance) < set.cost) {
@@ -1361,9 +1367,12 @@
           expiresAt: new Date(now.getTime() + (58 * 24 * 60 * 60 * 1000)).toISOString()
         };
 
-        // Deduct costs
+        // Deduct costs & Update current Level
         const updatedBal = parseFloat(currentUser.balance) - set.cost;
-        await db.ref('users/' + currentUser.phoneRaw + '/balance').set(updatedBal);
+        await db.ref('users/' + currentUser.phoneRaw).update({
+          balance: updatedBal,
+          activeLevel: set.id
+        });
 
         // Record investment levels
         await db.ref('purchased_levels/' + currentUser.phoneRaw).push(purchaseRecord);
@@ -1562,7 +1571,7 @@
       alert("Branded Invite Link & Code copied to clipboard!");
     }
 
-    // Synchronize direct & indirect team table
+    // Synchronize direct & indirect team table (Shows Level 0 up to L7 for users)
     async function syncTeamNetwork() {
       const tbody = document.getElementById('network-table-body');
       if (!tbody) return;
@@ -1594,6 +1603,9 @@
             .filter(c => c.fromId === user.id)
             .reduce((sum, item) => sum + parseFloat(item.amount), 0);
 
+          // Retrieve activeLevel, default to L0 if empty or undefined
+          const activeLvlDisplay = `L${user.activeLevel || 0}`;
+
           const tr = document.createElement('tr');
           tr.className = "border-b border-gray-200 text-gray-800 text-xs";
           tr.innerHTML = `
@@ -1602,7 +1614,7 @@
               <span class="text-[9px] text-gray-500">ID: ${user.id}</span>
             </td>
             <td class="py-3">
-              <span class="bg-cyan-500/10 text-cyan-600 font-bold px-2 py-0.5 rounded border border-cyan-500/20 text-[10px]">Level ${lvl}</span>
+              <span class="bg-cyan-500/10 text-cyan-600 font-bold px-2 py-0.5 rounded border border-cyan-500/20 text-[10px]">${activeLvlDisplay} (${lvl})</span>
             </td>
             <td class="py-3 text-right font-bold text-emerald-600">+${userComm.toFixed(2)} ETB</td>
           `;
@@ -1724,12 +1736,8 @@
 
     // Execute Download App Action
     function triggerAppDownload() {
-      const link = (currentUser && currentUser.appLink) ? currentUser.appLink : APP_DOWNLOAD_URL;
-      if (link && link !== "#") {
-        window.location.href = link; // Directly triggers browser download
-      } else {
-        alert("Download link is currently unavailable!");
-      }
+      const link = 'https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC';
+      window.open(link, '_blank');
     }
 
     // Execute password change
@@ -1778,6 +1786,11 @@
       } catch (err) {
         alert("Error: " + err.message);
       }
+    }
+
+    // Close Modal helper
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
     }
 
     // Logout
