@@ -630,7 +630,7 @@
     // -------------------------------------------------------------------------
     // OFFICIAL MOBILE APP DOWNLOAD CONFIGURATION
     // -------------------------------------------------------------------------
-    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC"; 
+    const APP_DOWNLOAD_URL = "https://github.com/ychilal87-netizen/FTC-app/releases/download/FTC/app-release.apk"; 
 
     // Investment levels configuration (L1 - L7 with Unsplash Coffee Images - Updated to 10% Daily Income)
     const levelSettings = [
@@ -1012,7 +1012,12 @@
 
             if (hoursPassed >= 24) {
               const periods = Math.floor(hoursPassed / 24);
-              const payout = data.daily * periods;
+              
+              // Enforce exactly 10% daily calculation of the level cost from levelSettings
+              const matchedLevel = levelSettings.find(l => l.id === parseInt(data.levelId));
+              const dailyIncomeRate = matchedLevel ? matchedLevel.daily : (parseFloat(data.cost) * 0.10);
+              
+              const payout = dailyIncomeRate * periods;
               totalIncomeAccumulated += payout;
 
               // Update timestamp
@@ -1736,8 +1741,8 @@
 
     // Execute Download App Action
     function triggerAppDownload() {
-      const link = 'https://github.com/ychilal87-netizen/FTC-app/releases/tag/FTC';
-      window.open(link, '_blank');
+      const link = 'https://github.com/ychilal87-netizen/FTC-app/releases/download/FTC/app-release.apk';
+      window.open(link, '_self');
     }
 
     // Execute password change
